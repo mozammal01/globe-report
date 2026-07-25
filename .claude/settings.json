@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(npx create-next-app@latest --help 2>&1)",
+      "Read(//d/Mozammal/Projects/worldnest-tmp/**)",
+      "Bash(chmod +x \"/d/Mozammal/Projects/worldNest/.husky/pre-commit\" \"/d/Mozammal/Projects/worldNest/.husky/commit-msg\")",
+      "PowerShell(cd D:\\\\Mozammal\\\\Projects\\\\worldNest; $job = Start-Job { Set-Location \"D:\\\\Mozammal\\\\Projects\\\\worldNest\"; npm run dev }; Start-Sleep -Seconds 8; try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 15; Write-Output \"STATUS: $\\($r.StatusCode\\)\"; Write-Output \\($r.Content.Substring\\(0, [Math]::Min\\(500, $r.Content.Length\\)\\)\\) } catch { Write-Output \"ERROR: $_\" }; Stop-Job $job; Receive-Job $job | Select-Object -Last 40; Remove-Job $job -Force)",
+      "PowerShell(cd D:\\\\Mozammal\\\\Projects\\\\worldNest; $job = Start-Job { Set-Location \"D:\\\\Mozammal\\\\Projects\\\\worldNest\"; npm run dev }; Start-Sleep -Seconds 8; try { $r1 = Invoke-WebRequest -Uri \"http://localhost:3000/robots.txt\" -UseBasicParsing -TimeoutSec 15; Write-Output \"ROBOTS: $\\($r1.StatusCode\\)\"; Write-Output $r1.Content; $r2 = Invoke-WebRequest -Uri \"http://localhost:3000/sitemap.xml\" -UseBasicParsing -TimeoutSec 15; Write-Output \"SITEMAP: $\\($r2.StatusCode\\)\"; Write-Output $r2.Content } catch { Write-Output \"ERROR: $_\" }; Stop-Job $job; Remove-Job $job -Force)",
+      "Bash(git -C \"/d/Mozammal/Projects/worldNest\" status --short)"
+    ]
+  }
+}
