@@ -29,10 +29,16 @@
       "Bash(curl.exe -s \"http://localhost:3000/\" -o /tmp/home.html)",
       "Bash(rm -f /tmp/home.html)",
       "Bash(powershell -NoProfile -Command 'Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq '\\\\'''\\\\'' } | Stop-Process -Force')",
-      "Bash(netstat -ano)"
+      "Bash(netstat -ano)",
+      "Bash(curl.exe -s -o /dev/null -w \"login: %{http_code}\\\\n\" \"http://localhost:3000/admin/login\")",
+      "Bash(rm -f /tmp/home.html /tmp/nf.html /tmp/dev.log)",
+      "Bash(curl.exe -s \"http://localhost:3000/\" -o /tmp/home2.html)",
+      "Bash(awk '{print $5}')",
+      "Bash(powershell -NoProfile -Command \"Stop-Process -Id 5328 -Force -ErrorAction SilentlyContinue\")"
     ],
     "additionalDirectories": [
-      "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth"
+      "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth",
+      "\\tmp"
     ]
   }
 }

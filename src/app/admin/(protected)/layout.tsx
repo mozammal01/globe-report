@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import { Container } from "@/components/ui/container";
 import { getCurrentAdmin } from "@/lib/auth/session";
 import { ROLE_DEFINITIONS, type RoleKey } from "@/lib/rbac";
 
@@ -24,7 +25,7 @@ export default async function AdminProtectedLayout({
   return (
     <div className="flex min-h-full flex-col">
       <header className="border-border border-b">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Container className="flex h-14 items-center justify-between">
           <div className="flex flex-col">
             <span className="text-sm font-medium">{admin.name}</span>
             <span className="text-muted-foreground text-xs">
@@ -33,11 +34,11 @@ export default async function AdminProtectedLayout({
             </span>
           </div>
           <SignOutButton />
-        </div>
+        </Container>
       </header>
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
+      <Container as="main" className="flex-1 py-10">
         {children}
-      </main>
+      </Container>
     </div>
   );
 }

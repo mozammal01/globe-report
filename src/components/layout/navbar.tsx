@@ -3,12 +3,13 @@ import Link from "next/link";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/config/site";
 
 export function Navbar() {
   return (
     <header className="border-border bg-background/80 supports-backdrop-filter:bg-background/60 sticky top-0 z-40 w-full border-b backdrop-blur-sm">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <Container className="flex h-14 items-center justify-between">
         <Link
           href="/"
           className="font-heading flex items-center gap-2 text-lg font-semibold tracking-tight"
@@ -33,7 +34,7 @@ export function Navbar() {
           <ThemeToggle />
           <MobileNav />
         </div>
-      </div>
+      </Container>
     </header>
   );
 }
