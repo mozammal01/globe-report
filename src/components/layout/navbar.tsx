@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { GlobalSearch } from "@/components/search/global-search";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/config/site";
 
@@ -31,6 +32,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-1">
+          <GlobalSearch />
           <ThemeToggle />
           <MobileNav />
         </div>

@@ -7,11 +7,13 @@ export function Pagination({
   totalPages,
   category,
   country,
+  tag,
 }: {
   page: number;
   totalPages: number;
   category?: string;
   country?: string;
+  tag?: string;
 }) {
   if (totalPages <= 1) {
     return null;
@@ -21,6 +23,7 @@ export function Pagination({
     const params = new URLSearchParams();
     if (category) params.set("category", category);
     if (country) params.set("country", country);
+    if (tag) params.set("tag", tag);
     if (target > 1) params.set("page", String(target));
     const qs = params.toString();
     return `/news${qs ? `?${qs}` : ""}`;

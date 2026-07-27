@@ -72,12 +72,26 @@
       "Bash(node -e ' *)",
       "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' http://localhost:3000/news)",
       "Bash(curl -s http://localhost:3000/news)",
-      "Bash(curl -s -o /dev/null http://localhost:3000/articles/central-banks-coordinated-approach-rates)"
+      "Bash(curl -s -o /dev/null http://localhost:3000/articles/central-banks-coordinated-approach-rates)",
+      "Bash(ls -la /d/Mozammal/Projects/ 2>&1)",
+      "Read(//d/Mozammal/Projects//**)",
+      "Read(//d/Mozammal/Projects/HomePilot/**)",
+      "Bash(npx tsc *)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' http://localhost:3002/)",
+      "Bash(curl -s http://localhost:3002/)",
+      "Bash(npm install *)",
+      "Bash(curl -s http://localhost:3003/api/search?q=climate)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>console.log\\(JSON.stringify\\(JSON.parse\\(d\\),null,2\\)\\)\\)\")",
+      "Bash(curl -s http://localhost:3003/api/search?q=bangladesh)"
     ],
     "additionalDirectories": [
       "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth",
       "\\tmp",
-      "D:\\Mozammal\\Projects\\worldNest\\src\\app\\(site)\\articles"
+      "D:\\Mozammal\\Projects\\worldNest\\src\\app\\(site)\\articles",
+      "D:\\Mozammal\\Projects\\HomePilot\\src\\components\\sections\\shared",
+      "D:\\Mozammal\\Projects\\HomePilot\\src\\components\\sections\\trusted",
+      "D:\\Mozammal\\Projects\\HomePilot\\src\\components\\sections\\metrics",
+      "D:\\Mozammal\\Projects\\HomePilot\\src\\app"
     ]
   }
 }

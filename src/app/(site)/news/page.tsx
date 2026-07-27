@@ -24,16 +24,26 @@ export const metadata: Metadata = {
 export default async function NewsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; country?: string; page?: string }>;
+  searchParams: Promise<{
+    category?: string;
+    country?: string;
+    tag?: string;
+    page?: string;
+  }>;
 }) {
-  const { category, country, page: pageParam } = await searchParams;
+  const { category, country, tag, page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
 
   const [categories, countries, { articles, total, pageSize }] =
     await Promise.all([
       getCategories(),
       getCountryOptions(),
-      getArticles({ categorySlug: category, countrySlug: country, page }),
+      getArticles({
+        categorySlug: category,
+        countrySlug: country,
+        tagSlug: tag,
+        page,
+      }),
     ]);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -74,6 +84,7 @@ export default async function NewsPage({
             totalPages={totalPages}
             category={category}
             country={country}
+            tag={tag}
           />
         </div>
       </Container>

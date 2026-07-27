@@ -111,11 +111,13 @@ const ARTICLES_PAGE_SIZE = 12;
 export async function getArticles({
   categorySlug,
   countrySlug,
+  tagSlug,
   page = 1,
   pageSize = ARTICLES_PAGE_SIZE,
 }: {
   categorySlug?: string;
   countrySlug?: string;
+  tagSlug?: string;
   page?: number;
   pageSize?: number;
 } = {}) {
@@ -123,6 +125,7 @@ export async function getArticles({
     status: "PUBLISHED" as const,
     ...(categorySlug ? { category: { slug: categorySlug } } : {}),
     ...(countrySlug ? { country: { slug: countrySlug } } : {}),
+    ...(tagSlug ? { tags: { some: { slug: tagSlug } } } : {}),
   };
 
   const [articles, total] = await Promise.all([
