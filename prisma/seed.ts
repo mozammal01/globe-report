@@ -1,7 +1,9 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { hashPassword } from "better-auth/crypto";
 
 import { PrismaClient } from "../src/generated/prisma/client";
+import { ROLE, ROLE_DEFINITIONS } from "../src/lib/rbac";
 import { countries } from "./seed-data/countries";
 
 const COMBINING_DIACRITICS = new RegExp(
@@ -61,8 +63,79 @@ async function seedCountries() {
   console.log(`Seeded ${countries.length} countries.`);
 }
 
+async function seedRoles() {
+  for (const key of Object.values(ROLE)) {
+    const definition = ROLE_DEFINITIONS[key];
+
+    await prisma.role.upsert({
+      where: { key },
+      update: { name: definition.name, description: definition.description },
+      create: {
+        key,
+        name: definition.name,
+        description: definition.description,
+      },
+    });
+  }
+
+  console.log(`Seeded ${Object.values(ROLE).length} roles.`);
+}
+
+async function seedAdminUser() {
+  const name = process.env.ADMIN_NAME;
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!name || !email || !password) {
+    console.log(
+      "Skipped admin bootstrap (ADMIN_NAME / ADMIN_EMAIL / ADMIN_PASSWORD not set).",
+    );
+    return;
+  }
+
+  const adminRole = await prisma.role.findUniqueOrThrow({
+    where: { key: ROLE.ADMIN },
+  });
+
+  const user = await prisma.user.upsert({
+    where: { email },
+    update: {},
+    create: {
+      name,
+      email,
+      emailVerified: true,
+      status: "ACTIVE",
+      roleId: adminRole.id,
+    },
+  });
+
+  const existingCredentialAccount = await prisma.account.findFirst({
+    where: { userId: user.id, providerId: "credential" },
+  });
+
+  if (existingCredentialAccount) {
+    console.log(`Admin user already exists: ${email}`);
+    return;
+  }
+
+  const hashedPassword = await hashPassword(password);
+
+  await prisma.account.create({
+    data: {
+      userId: user.id,
+      providerId: "credential",
+      accountId: user.id,
+      password: hashedPassword,
+    },
+  });
+
+  console.log(`Seeded admin user: ${email}`);
+}
+
 async function main() {
   await seedCountries();
+  await seedRoles();
+  await seedAdminUser();
 }
 
 main()

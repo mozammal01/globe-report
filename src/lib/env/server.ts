@@ -8,12 +8,16 @@ const serverEnvSchema = z.object({
   DATABASE_URL: z.url({
     error: "DATABASE_URL must be a valid connection string",
   }),
+  BETTER_AUTH_SECRET: z
+    .string()
+    .min(32, "BETTER_AUTH_SECRET must be at least 32 characters"),
 });
 
 function parseServerEnv() {
   const parsed = serverEnvSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
   });
 
   if (!parsed.success) {

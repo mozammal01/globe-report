@@ -8,7 +8,31 @@
       "Bash(chmod +x \"/d/Mozammal/Projects/worldNest/.husky/pre-commit\" \"/d/Mozammal/Projects/worldNest/.husky/commit-msg\")",
       "PowerShell(cd D:\\\\Mozammal\\\\Projects\\\\worldNest; $job = Start-Job { Set-Location \"D:\\\\Mozammal\\\\Projects\\\\worldNest\"; npm run dev }; Start-Sleep -Seconds 8; try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 15; Write-Output \"STATUS: $\\($r.StatusCode\\)\"; Write-Output \\($r.Content.Substring\\(0, [Math]::Min\\(500, $r.Content.Length\\)\\)\\) } catch { Write-Output \"ERROR: $_\" }; Stop-Job $job; Receive-Job $job | Select-Object -Last 40; Remove-Job $job -Force)",
       "PowerShell(cd D:\\\\Mozammal\\\\Projects\\\\worldNest; $job = Start-Job { Set-Location \"D:\\\\Mozammal\\\\Projects\\\\worldNest\"; npm run dev }; Start-Sleep -Seconds 8; try { $r1 = Invoke-WebRequest -Uri \"http://localhost:3000/robots.txt\" -UseBasicParsing -TimeoutSec 15; Write-Output \"ROBOTS: $\\($r1.StatusCode\\)\"; Write-Output $r1.Content; $r2 = Invoke-WebRequest -Uri \"http://localhost:3000/sitemap.xml\" -UseBasicParsing -TimeoutSec 15; Write-Output \"SITEMAP: $\\($r2.StatusCode\\)\"; Write-Output $r2.Content } catch { Write-Output \"ERROR: $_\" }; Stop-Job $job; Remove-Job $job -Force)",
-      "Bash(git -C \"/d/Mozammal/Projects/worldNest\" status --short)"
+      "Bash(git -C \"/d/Mozammal/Projects/worldNest\" status --short)",
+      "Bash(xargs grep -l \"BetterAuthOptions\")",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('base64'\\)\\)\")",
+      "Bash(mkdir -p \"/d/Mozammal/Projects/worldNest/src/app/api/auth/[...all]\")",
+      "Bash(git -C \"/d/Mozammal/Projects/worldNest\" mv src/app/page.tsx \"src/app/\\(site\\)/page.tsx\")",
+      "Bash(curl.exe -s -D - -o /tmp/badlogin.json -X POST http://localhost:3000/api/auth/sign-in/email -H 'Content-Type: application/json' -d '{\"email\":\"admin@globereport.com\",\"password\":\"WrongPassword123\"}')",
+      "Read(//tmp/**)",
+      "Bash(curl.exe -s -c /tmp/cookies.txt -D - -o /tmp/goodlogin.json -X POST http://localhost:3000/api/auth/sign-in/email -H 'Content-Type: application/json' -d '{\"email\":\"admin@globereport.com\",\"password\":\"Admin#12345\"}')",
+      "Bash(curl.exe -s -b /tmp/cookies.txt -D - -o /tmp/admin.html \"http://localhost:3000/admin\")",
+      "Bash(grep -o \"Welcome,[^<]*\" \"/tmp/admin.html\" | head -5)",
+      "Bash(curl.exe -s -b /tmp/cookies.txt -o /dev/null -D - \"http://localhost:3000/admin/login\")",
+      "Bash(curl.exe -s -b /tmp/cookies.txt -c /tmp/cookies.txt -D - -o /dev/null -X POST \"http://localhost:3000/api/auth/sign-out\")",
+      "Bash(curl.exe -s -b /tmp/cookies.txt -o /dev/null -D - \"http://localhost:3000/admin\")",
+      "Bash(curl.exe -s -b /tmp/cookies.txt -c /tmp/cookies.txt -D - -o /dev/null -X POST \"http://localhost:3000/api/auth/sign-out\" -H \"Content-Type: application/json\" -d '{}')",
+      "Bash(curl.exe -s -b /tmp/cookies.txt -c /tmp/cookies.txt -D - -o /dev/null -X POST \"http://localhost:3000/api/auth/sign-out\" -H \"Content-Type: application/json\" -H \"Origin: http://localhost:3000\" -d '{}')",
+      "Bash(curl.exe -s -D - -o /tmp/suspended.json -X POST http://localhost:3000/api/auth/sign-in/email -H 'Content-Type: application/json' -d '{\"email\":\"admin@globereport.com\",\"password\":\"Admin#12345\"}')",
+      "Bash(npx tsx *)",
+      "Bash(rm -f prisma/tmp-suspend.ts /tmp/cookies.txt /tmp/badlogin.json /tmp/goodlogin.json /tmp/admin.html /tmp/suspended.json /tmp/dev.log)",
+      "Bash(curl.exe -s \"http://localhost:3000/\" -o /tmp/home.html)",
+      "Bash(rm -f /tmp/home.html)",
+      "Bash(powershell -NoProfile -Command 'Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq '\\\\'''\\\\'' } | Stop-Process -Force')",
+      "Bash(netstat -ano)"
+    ],
+    "additionalDirectories": [
+      "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth"
     ]
   }
 }

@@ -76,16 +76,15 @@ model Role {
 }
 
 model User {
-  id              String     @id @default(cuid())
-  name            String
-  email           String     @unique
-  slug            String?    @unique
-  passwordHash    String?
-  avatarUrl       String?
-  bio             String?
-  status          UserStatus @default(ACTIVE)
-  emailVerifiedAt DateTime?
-  lastLoginAt     DateTime?
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  slug          String?    @unique
+  avatarUrl     String?
+  bio           String?
+  status        UserStatus @default(ACTIVE)
+  lastLoginAt   DateTime?
 
   roleId String
   role   Role   @relation(fields: [roleId], references: [id], onDelete: Restrict)
@@ -96,11 +95,69 @@ model User {
   views         View[]
   comments      Comment[]
   subscriptions Newsletter[]
+  sessions      Session[]
+  accounts      Account[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// Authentication (Better Auth)
+// ---------------------------------------------------------------------------
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
+}
+
+model Account {
+  id         String @id @default(cuid())
+  accountId  String
+  providerId String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([providerId, accountId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
 }
 
 // ---------------------------------------------------------------------------
