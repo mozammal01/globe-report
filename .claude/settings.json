@@ -34,11 +34,19 @@
       "Bash(rm -f /tmp/home.html /tmp/nf.html /tmp/dev.log)",
       "Bash(curl.exe -s \"http://localhost:3000/\" -o /tmp/home2.html)",
       "Bash(awk '{print $5}')",
-      "Bash(powershell -NoProfile -Command \"Stop-Process -Id 5328 -Force -ErrorAction SilentlyContinue\")"
+      "Bash(powershell -NoProfile -Command \"Stop-Process -Id 5328 -Force -ErrorAction SilentlyContinue\")",
+      "Bash(xargs grep -l \"function email\")",
+      "Bash(mkdir -p \"/d/Mozammal/Projects/worldNest/src/app/\\(site\\)/articles/[slug]\")",
+      "Bash(curl.exe -s -o /tmp/article.html -w \"article: %{http_code}\\\\n\" \"http://localhost:3000/articles/world-leaders-convene-global-climate-summit\")",
+      "Bash(curl.exe -s -o /dev/null -w \"missing-article: %{http_code}\\\\n\" \"http://localhost:3000/articles/does-not-exist\")",
+      "Bash(curl.exe -s -o /dev/null -w \"image proxy: %{http_code}\\\\n\" \"http://localhost:3000/_next/image?url=https%3A%2F%2Fpicsum.photos%2Fseed%2Fclimate-summit%2F1200%2F800&w=750&q=75\")",
+      "Bash(curl.exe -s -o /tmp/mobile.html -A \"Mozilla/5.0 \\(iPhone; CPU iPhone OS 17_0 like Mac OS X\\)\" -w \"mobile-ua: %{http_code}\\\\n\" \"http://localhost:3000/\")",
+      "Bash(rm -f /tmp/home.html /tmp/article.html /tmp/mobile.html /tmp/dev.log)"
     ],
     "additionalDirectories": [
       "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth",
-      "\\tmp"
+      "\\tmp",
+      "D:\\Mozammal\\Projects\\worldNest\\src\\app\\(site)\\articles"
     ]
   }
 }
