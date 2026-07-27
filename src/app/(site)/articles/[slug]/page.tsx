@@ -1,15 +1,19 @@
+import { Eye, Newspaper } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ShareButtons } from "@/components/article/share-buttons";
+import { ViewTracker } from "@/components/article/view-tracker";
+import { ArticleSection } from "@/components/home/article-section";
 import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { H1, P } from "@/components/ui/typography";
 import { siteConfig } from "@/config/site";
-import { formatDate } from "@/lib/format";
-import { getArticleBySlug } from "@/lib/queries/articles";
+import { formatCompactNumber, formatDate } from "@/lib/format";
+import { getArticleBySlug, getRelatedArticles } from "@/lib/queries/articles";
 
 export const revalidate = 60;
 
@@ -62,6 +66,13 @@ export default async function ArticlePage({
     notFound();
   }
 
+  const related = await getRelatedArticles(
+    { id: article.id, categoryId: article.categoryId },
+    3,
+  );
+
+  const articleUrl = `${siteConfig.url}/articles/${article.slug}`;
+
   const paragraphs = article.content
     .split("\n\n")
     .map((paragraph) => paragraph.trim())
@@ -93,6 +104,7 @@ export default async function ArticlePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <ViewTracker articleId={article.id} />
 
       {article.coverImage && (
         <div className="bg-muted relative aspect-21/9 w-full overflow-hidden">
@@ -133,6 +145,11 @@ export default async function ArticlePage({
                   <span>{article.readingTimeMinutes} min read</span>
                 </>
               )}
+              <span aria-hidden>&middot;</span>
+              <span className="inline-flex items-center gap-1">
+                <Eye className="size-3.5" aria-hidden />
+                {formatCompactNumber(article.viewCount)} views
+              </span>
             </div>
 
             <div className="border-border flex flex-col gap-4 border-t pt-6">
@@ -151,6 +168,10 @@ export default async function ArticlePage({
               </div>
             )}
 
+            <div className="border-border border-t pt-6">
+              <ShareButtons url={articleUrl} title={article.title} />
+            </div>
+
             <Link
               href="/"
               className="text-primary mt-2 text-sm font-medium hover:underline"
@@ -160,6 +181,14 @@ export default async function ArticlePage({
           </div>
         </Container>
       </Section>
+
+      <ArticleSection
+        title="Related Articles"
+        icon={Newspaper}
+        articles={related}
+        cols={3}
+        emptyMessage="No related articles yet."
+      />
     </>
   );
 }

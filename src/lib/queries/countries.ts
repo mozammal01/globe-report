@@ -49,7 +49,25 @@ export async function getCountrySlugs() {
   });
 }
 
+const countryOptionSelect = {
+  id: true,
+  name: true,
+  slug: true,
+  region: true,
+  flagEmoji: true,
+} as const;
+
+export async function getCountryOptions() {
+  return prisma.country.findMany({
+    orderBy: [{ region: "asc" }, { name: "asc" }],
+    select: countryOptionSelect,
+  });
+}
+
 export type CountryCard = Awaited<ReturnType<typeof getCountries>>[number];
 export type CountryDetail = NonNullable<
   Awaited<ReturnType<typeof getCountryBySlug>>
 >;
+export type CountryOption = Awaited<
+  ReturnType<typeof getCountryOptions>
+>[number];

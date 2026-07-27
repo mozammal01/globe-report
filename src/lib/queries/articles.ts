@@ -106,12 +106,62 @@ export async function getArticlesByCountry(countryId: string, limit = 6) {
   });
 }
 
+const ARTICLES_PAGE_SIZE = 12;
+
+export async function getArticles({
+  categorySlug,
+  countrySlug,
+  page = 1,
+  pageSize = ARTICLES_PAGE_SIZE,
+}: {
+  categorySlug?: string;
+  countrySlug?: string;
+  page?: number;
+  pageSize?: number;
+} = {}) {
+  const where = {
+    status: "PUBLISHED" as const,
+    ...(categorySlug ? { category: { slug: categorySlug } } : {}),
+    ...(countrySlug ? { country: { slug: countrySlug } } : {}),
+  };
+
+  const [articles, total] = await Promise.all([
+    prisma.article.findMany({
+      where,
+      orderBy: { publishedAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      select: articleCardSelect,
+    }),
+    prisma.article.count({ where }),
+  ]);
+
+  return { articles, total, page, pageSize };
+}
+
+export async function getRelatedArticles(
+  article: { id: string; categoryId: string },
+  limit = 3,
+) {
+  return prisma.article.findMany({
+    where: {
+      status: "PUBLISHED",
+      id: { not: article.id },
+      categoryId: article.categoryId,
+    },
+    orderBy: { publishedAt: "desc" },
+    take: limit,
+    select: articleCardSelect,
+  });
+}
+
 export async function getArticleBySlug(slug: string) {
   return prisma.article.findFirst({
     where: { slug, status: "PUBLISHED" },
     select: {
       ...articleCardSelect,
       content: true,
+      categoryId: true,
       seoTitle: true,
       seoDescription: true,
       updatedAt: true,
@@ -126,6 +176,7 @@ export type ArticleCard = NonNullable<
 export type FeaturedCountry = Awaited<
   ReturnType<typeof getFeaturedCountries>
 >[number];
+export type ArticlesResult = Awaited<ReturnType<typeof getArticles>>;
 export type ArticleDetail = NonNullable<
   Awaited<ReturnType<typeof getArticleBySlug>>
 >;

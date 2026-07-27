@@ -1,0 +1,82 @@
+import type { Metadata } from "next";
+
+import { ArticleCard } from "@/components/home/article-card";
+import { NewsFilters } from "@/components/news/news-filters";
+import { Pagination } from "@/components/news/pagination";
+import { Container } from "@/components/ui/container";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Grid } from "@/components/ui/grid";
+import { Section } from "@/components/ui/section";
+import { H1, Lead } from "@/components/ui/typography";
+import { getArticles } from "@/lib/queries/articles";
+import { getCategories } from "@/lib/queries/categories";
+import { getCountryOptions } from "@/lib/queries/countries";
+
+export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "News",
+  description:
+    "Browse the latest news from Globe Report, filterable by category and country.",
+  alternates: { canonical: "/news" },
+};
+
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; country?: string; page?: string }>;
+}) {
+  const { category, country, page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+
+  const [categories, countries, { articles, total, pageSize }] =
+    await Promise.all([
+      getCategories(),
+      getCountryOptions(),
+      getArticles({ categorySlug: category, countrySlug: country, page }),
+    ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  return (
+    <Section spacing="sm">
+      <Container>
+        <div className="mb-6 flex flex-col gap-2">
+          <H1>News</H1>
+          <Lead>
+            Browse the latest stories, filtered by category and country.
+          </Lead>
+        </div>
+
+        <NewsFilters
+          categories={categories}
+          countries={countries}
+          selectedCategory={category}
+          selectedCountry={country}
+        />
+
+        {articles.length > 0 ? (
+          <Grid cols={3} className="mt-8">
+            {articles.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </Grid>
+        ) : (
+          <EmptyState
+            title="No articles match these filters."
+            className="mt-8"
+          />
+        )}
+
+        <div className="mt-10">
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            category={category}
+            country={country}
+          />
+        </div>
+      </Container>
+    </Section>
+  );
+}

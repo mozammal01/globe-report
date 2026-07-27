@@ -69,7 +69,10 @@
       "Bash(curl -s http://localhost:3001/countries/albania)",
       "Bash(curl -s http://localhost:3001/)",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{try{console.log\\(JSON.stringify\\(JSON.parse\\(d\\),null,2\\)\\)}catch\\(e\\){console.error\\('INVALID JSON',e.message\\)}}\\)\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' http://localhost:3000/news)",
+      "Bash(curl -s http://localhost:3000/news)",
+      "Bash(curl -s -o /dev/null http://localhost:3000/articles/central-banks-coordinated-approach-rates)"
     ],
     "additionalDirectories": [
       "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth",
