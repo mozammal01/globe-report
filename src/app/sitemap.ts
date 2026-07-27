@@ -1,8 +1,11 @@
 import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/config/site";
+import { getCountrySlugs } from "@/lib/queries/countries";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const countries = await getCountrySlugs();
+
   return [
     {
       url: siteConfig.url,
@@ -10,5 +13,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 1,
     },
+    {
+      url: `${siteConfig.url}/countries`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    ...countries.map((country) => ({
+      url: `${siteConfig.url}/countries/${country.slug}`,
+      lastModified: country.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    })),
   ];
 }

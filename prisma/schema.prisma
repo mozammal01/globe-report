@@ -173,6 +173,24 @@ model Country {
   region    String?
   flagEmoji String?
 
+  heroImageUrl String?
+  heroImageAlt String?
+
+  population Int?
+  capital    String?
+  currency   String?
+  religion   String?
+
+  economy    String?
+  gdpSummary String?
+  travel     String?
+  history    String?
+
+  interestingFacts String[] @default([])
+
+  seoTitle       String?
+  seoDescription String?
+
   articles Article[]
 
   createdAt DateTime @default(now())

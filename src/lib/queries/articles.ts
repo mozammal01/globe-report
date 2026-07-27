@@ -97,6 +97,15 @@ export async function getFeaturedCountries(limit = 8) {
     .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 }
 
+export async function getArticlesByCountry(countryId: string, limit = 6) {
+  return prisma.article.findMany({
+    where: { status: "PUBLISHED", countryId },
+    orderBy: { publishedAt: "desc" },
+    take: limit,
+    select: articleCardSelect,
+  });
+}
+
 export async function getArticleBySlug(slug: string) {
   return prisma.article.findFirst({
     where: { slug, status: "PUBLISHED" },

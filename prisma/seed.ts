@@ -6,6 +6,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { ROLE, ROLE_DEFINITIONS } from "../src/lib/rbac";
 import { articles } from "./seed-data/articles";
 import { categories } from "./seed-data/categories";
+import { countryDetails } from "./seed-data/country-details";
 import { countries } from "./seed-data/countries";
 import { tags } from "./seed-data/tags";
 
@@ -38,10 +39,15 @@ if (!connectionString) {
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
+const countryDetailsByIso2 = new Map(
+  countryDetails.map((details) => [details.iso2, details]),
+);
+
 async function seedCountries() {
   for (const country of countries) {
     const slug = toSlug(country.name);
     const flagEmoji = toFlagEmoji(country.iso2);
+    const details = countryDetailsByIso2.get(country.iso2) ?? {};
 
     await prisma.country.upsert({
       where: { iso2: country.iso2 },
@@ -51,6 +57,7 @@ async function seedCountries() {
         iso3: country.iso3,
         region: country.region,
         flagEmoji,
+        ...details,
       },
       create: {
         name: country.name,
@@ -59,11 +66,14 @@ async function seedCountries() {
         iso3: country.iso3,
         region: country.region,
         flagEmoji,
+        ...details,
       },
     });
   }
 
-  console.log(`Seeded ${countries.length} countries.`);
+  console.log(
+    `Seeded ${countries.length} countries (${countryDetails.length} with rich content).`,
+  );
 }
 
 async function seedRoles() {

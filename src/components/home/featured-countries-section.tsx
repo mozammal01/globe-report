@@ -1,4 +1,5 @@
 import { Globe2 } from "lucide-react";
+import Link from "next/link";
 
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -23,9 +24,10 @@ export function FeaturedCountriesSection({
         {countries.length > 0 ? (
           <Grid cols={4} gap="sm">
             {countries.map((country) => (
-              <div
+              <Link
                 key={country.id}
-                className="border-border bg-card flex items-center gap-3 rounded-lg border px-4 py-3"
+                href={`/countries/${country.slug}`}
+                className="border-border bg-card hover:bg-muted/60 flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors"
               >
                 <span className="text-2xl" aria-hidden>
                   {country.flagEmoji}
@@ -37,7 +39,7 @@ export function FeaturedCountriesSection({
                     {country.articleCount === 1 ? "story" : "stories"}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </Grid>
         ) : (
