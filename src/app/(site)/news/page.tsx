@@ -3,14 +3,17 @@ import type { Metadata } from "next";
 import { ArticleCard } from "@/components/home/article-card";
 import { NewsFilters } from "@/components/news/news-filters";
 import { Pagination } from "@/components/news/pagination";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Grid } from "@/components/ui/grid";
 import { Section } from "@/components/ui/section";
 import { H1, Lead } from "@/components/ui/typography";
+import { siteConfig } from "@/config/site";
 import { getArticles } from "@/lib/queries/articles";
 import { getCategories } from "@/lib/queries/categories";
 import { getCountryOptions } from "@/lib/queries/countries";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -48,9 +51,26 @@ export default async function NewsPage({
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
+  const selectedCategoryName = categories.find(
+    (item) => item.slug === category,
+  )?.name;
+  const selectedCountryName = countries.find(
+    (item) => item.slug === country,
+  )?.name;
+  const filterLabel = selectedCategoryName ?? selectedCountryName ?? tag;
+
+  const breadcrumb = breadcrumbJsonLd(
+    [
+      { name: "Home", url: siteConfig.url },
+      { name: "News", url: `${siteConfig.url}/news` },
+      filterLabel ? { name: filterLabel, url: `${siteConfig.url}/news` } : null,
+    ].filter((item): item is { name: string; url: string } => item !== null),
+  );
+
   return (
     <Section spacing="sm">
       <Container>
+        <JsonLd data={breadcrumb} />
         <div className="mb-6 flex flex-col gap-2">
           <H1>News</H1>
           <Lead>

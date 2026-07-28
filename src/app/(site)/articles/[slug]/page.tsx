@@ -5,13 +5,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ArticleView } from "@/components/article/article-view";
+import { BookmarkButton } from "@/components/article/bookmark-button";
 import { ShareButtons } from "@/components/article/share-buttons";
 import { ViewTracker } from "@/components/article/view-tracker";
 import { ArticleSection } from "@/components/home/article-section";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { siteConfig } from "@/config/site";
 import { getArticleBySlug, getRelatedArticles } from "@/lib/queries/articles";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -71,32 +74,16 @@ export default async function ArticlePage({
 
   const articleUrl = `${siteConfig.url}/articles/${article.slug}`;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    headline: article.title,
-    description: article.excerpt ?? undefined,
-    image: article.coverImage ? [article.coverImage.url] : undefined,
-    datePublished: article.publishedAt?.toISOString(),
-    dateModified: article.updatedAt.toISOString(),
-    author: [{ "@type": "Person", name: article.author.name }],
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${siteConfig.url}/articles/${article.slug}`,
-    },
-  };
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", url: siteConfig.url },
+    { name: "News", url: `${siteConfig.url}/news` },
+    { name: article.title, url: articleUrl },
+  ]);
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={articleJsonLd(article, articleUrl)} />
+      <JsonLd data={breadcrumb} />
       <ViewTracker articleId={article.id} />
 
       {article.coverImage && (
@@ -117,8 +104,9 @@ export default async function ArticlePage({
           <div className="flex flex-col gap-4">
             <ArticleView article={article} />
 
-            <div className="border-border border-t pt-6">
+            <div className="border-border flex flex-wrap items-center justify-between gap-3 border-t pt-6">
               <ShareButtons url={articleUrl} title={article.title} />
+              <BookmarkButton articleId={article.id} />
             </div>
 
             <Link

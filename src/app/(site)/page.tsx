@@ -1,31 +1,21 @@
-import { Flame, Newspaper, Star, TrendingUp } from "lucide-react";
+import { Newspaper } from "lucide-react";
+import { Suspense } from "react";
 
 import { ArticleSection } from "@/components/home/article-section";
-import { FeaturedCountriesSection } from "@/components/home/featured-countries-section";
+import { ArticleSectionSkeleton } from "@/components/home/article-section-skeleton";
+import { EditorsPicksSection } from "@/components/home/editors-picks-section";
+import { FeaturedCountriesAsync } from "@/components/home/featured-countries-async";
 import { HeroSection } from "@/components/home/hero-section";
 import { NewsletterSection } from "@/components/home/newsletter-section";
-import {
-  getEditorsPicks,
-  getFeaturedCountries,
-  getHeroArticle,
-  getLatestArticles,
-  getPopularArticles,
-  getTrendingArticles,
-} from "@/lib/queries/articles";
+import { PopularSection } from "@/components/home/popular-section";
+import { TrendingSection } from "@/components/home/trending-section";
+import { getHeroArticle, getLatestArticles } from "@/lib/queries/articles";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
   const hero = await getHeroArticle();
-
-  const [latest, trending, popular, editorsPicks, featuredCountries] =
-    await Promise.all([
-      getLatestArticles(6, hero?.id),
-      getTrendingArticles(4),
-      getPopularArticles(4),
-      getEditorsPicks(3),
-      getFeaturedCountries(8),
-    ]);
+  const latest = await getLatestArticles(6, hero?.id);
 
   return (
     <>
@@ -39,32 +29,21 @@ export default async function HomePage() {
         className="border-t-0"
       />
 
-      <ArticleSection
-        title="Trending"
-        description="What readers are following right now"
-        icon={TrendingUp}
-        articles={trending}
-        cols={4}
-        emptyMessage="No trending stories in the last two weeks."
-      />
+      <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
+        <TrendingSection />
+      </Suspense>
 
-      <ArticleSection
-        title="Popular"
-        description="All-time reader favorites"
-        icon={Flame}
-        articles={popular}
-        cols={4}
-      />
+      <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
+        <PopularSection />
+      </Suspense>
 
-      <FeaturedCountriesSection countries={featuredCountries} />
+      <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
+        <FeaturedCountriesAsync />
+      </Suspense>
 
-      <ArticleSection
-        title="Editor's Picks"
-        description="Hand-picked stories worth your time"
-        icon={Star}
-        articles={editorsPicks}
-        cols={3}
-      />
+      <Suspense fallback={<ArticleSectionSkeleton cols={3} count={3} />}>
+        <EditorsPicksSection />
+      </Suspense>
 
       <NewsletterSection />
     </>

@@ -1,9 +1,12 @@
 "use client";
 
 import {
+  BarChart3,
   FolderTree,
   Globe2,
   LayoutDashboard,
+  Mail,
+  MessageSquare,
   Newspaper,
   Tag,
 } from "lucide-react";
@@ -18,6 +21,9 @@ const links = [
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/countries", label: "Countries", icon: Globe2 },
   { href: "/admin/tags", label: "Tags", icon: Tag },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/newsletter", label: "Newsletter", icon: Mail },
+  { href: "/admin/contact", label: "Contact", icon: MessageSquare },
 ];
 
 export function AdminSidebar() {

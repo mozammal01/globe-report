@@ -15,10 +15,12 @@ export function MediaUploader({
   value,
   onChange,
   label,
+  action = uploadMedia,
 }: {
   value: MediaValue | null;
   onChange: (value: MediaValue | null) => void;
   label: string;
+  action?: (formData: FormData) => Promise<MediaValue | { error: string }>;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +35,7 @@ export function MediaUploader({
     formData.set("file", file);
 
     startTransition(async () => {
-      const result = await uploadMedia(formData);
+      const result = await action(formData);
       if ("error" in result) {
         setError(result.error);
         return;

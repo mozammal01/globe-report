@@ -28,3 +28,22 @@ export const getCurrentAdmin = cache(async () => {
 
   return user;
 });
+
+export const getCurrentUser = cache(async () => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: { role: true },
+  });
+
+  if (!user || user.status !== "ACTIVE") {
+    return null;
+  }
+
+  return user;
+});

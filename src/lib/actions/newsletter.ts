@@ -1,7 +1,11 @@
 "use server";
 
+import { randomUUID } from "crypto";
+
 import { z } from "zod";
 
+import { newsletterConfirmationEmail } from "@/lib/email/templates";
+import { resend } from "@/lib/email/resend";
 import { prisma } from "@/lib/prisma";
 
 const newsletterSchema = z.object({
@@ -29,23 +33,37 @@ export async function subscribeToNewsletter(
   }
 
   const { email } = parsed.data;
+  const token = randomUUID();
+
+  const existing = await prisma.newsletter.findUnique({ where: { email } });
+
+  if (existing?.status === "SUBSCRIBED") {
+    return {
+      status: "success",
+      message: "You're already subscribed. Thanks for being here.",
+    };
+  }
 
   await prisma.newsletter.upsert({
     where: { email },
-    update: {
-      status: "SUBSCRIBED",
-      subscribedAt: new Date(),
-      unsubscribedAt: null,
-    },
-    create: {
-      email,
-      status: "SUBSCRIBED",
-      subscribedAt: new Date(),
-    },
+    update: { status: "PENDING", token },
+    create: { email, status: "PENDING", token },
   });
+
+  try {
+    const { subject, html } = newsletterConfirmationEmail(token);
+    await resend.emails.send({
+      from: "Globe Report <onboarding@resend.dev>",
+      to: email,
+      subject,
+      html,
+    });
+  } catch (error) {
+    console.error("Failed to send newsletter confirmation email:", error);
+  }
 
   return {
     status: "success",
-    message: "You're subscribed. Thanks for joining Globe Report.",
+    message: "Almost there — check your inbox to confirm your subscription.",
   };
 }

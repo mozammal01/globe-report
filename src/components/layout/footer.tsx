@@ -1,7 +1,9 @@
 import { Globe2 } from "lucide-react";
 import Link from "next/link";
 
+import { NewsletterForm } from "@/components/shared/newsletter-form";
 import { Container } from "@/components/ui/container";
+import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/config/site";
 
 export function Footer() {
@@ -10,7 +12,7 @@ export function Footer() {
   return (
     <footer className="border-border border-t">
       <Container className="flex flex-col gap-6 py-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-2">
             <Link
               href="/"
@@ -24,12 +26,33 @@ export function Footer() {
             </p>
           </div>
 
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">Stay informed</p>
+            <NewsletterForm />
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <nav className="flex flex-wrap gap-x-6 gap-y-2">
             {siteConfig.nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                {item.title}
+              </Link>
+            ))}
+          </nav>
+
+          <nav className="flex flex-wrap gap-x-6 gap-y-2">
+            {siteConfig.legalNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-muted-foreground hover:text-foreground text-xs transition-colors"
               >
                 {item.title}
               </Link>

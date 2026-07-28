@@ -1,7 +1,7 @@
 "use server";
 
 import DOMPurify from "isomorphic-dompurify";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -89,6 +89,7 @@ async function revalidateArticlePaths(slug: string, countrySlug?: string) {
   revalidatePath("/");
   revalidatePath(`/articles/${slug}`);
   if (countrySlug) revalidatePath(`/countries/${countrySlug}`);
+  revalidateTag("articles");
 }
 
 export async function createArticle(

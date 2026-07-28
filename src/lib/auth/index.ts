@@ -6,6 +6,7 @@ import { betterAuth } from "better-auth";
 import { clientEnv } from "@/lib/env/client";
 import { serverEnv } from "@/lib/env/server";
 import { prisma } from "@/lib/prisma";
+import { ROLE } from "@/lib/rbac";
 
 export const auth = betterAuth({
   secret: serverEnv.BETTER_AUTH_SECRET,
@@ -16,10 +17,15 @@ export const auth = betterAuth({
     fields: {
       image: "avatarUrl",
     },
+    additionalFields: {
+      // Registered so the create hook below can set it — `input: false`
+      // stops it from ever being accepted from a client-supplied payload.
+      roleId: { type: "string", required: false, input: false },
+    },
   },
   emailAndPassword: {
     enabled: true,
-    disableSignUp: true,
+    disableSignUp: false,
     minPasswordLength: 8,
   },
   session: {
@@ -27,6 +33,21 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // 1 day
   },
   databaseHooks: {
+    user: {
+      create: {
+        // Self-signup always lands as READER — admin/editor/author accounts
+        // are provisioned only via seed/DB, never via the public signup form.
+        before: async (user) => {
+          const readerRole = await prisma.role.findUnique({
+            where: { key: ROLE.READER },
+          });
+
+          if (!readerRole) return;
+
+          return { data: { ...user, roleId: readerRole.id } };
+        },
+      },
+    },
     session: {
       create: {
         before: async (session) => {

@@ -376,3 +376,16 @@ model Newsletter {
 
   @@map("newsletter_subscribers")
 }
+
+model ContactMessage {
+  id      String @id @default(cuid())
+  name    String
+  email   String
+  subject String
+  message String
+  readAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}

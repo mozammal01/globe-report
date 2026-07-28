@@ -7,14 +7,18 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth/client";
 
-export function SignOutButton() {
+export function SignOutButton({
+  redirectTo = "/admin/login",
+}: {
+  redirectTo?: string;
+}) {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
 
   async function handleSignOut() {
     setIsPending(true);
     await signOut();
-    router.push("/admin/login");
+    router.push(redirectTo);
     router.refresh();
   }
 

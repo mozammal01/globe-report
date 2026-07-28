@@ -16,14 +16,10 @@ const ALLOWED_MIME_TYPES: Record<string, string> = {
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
-export async function uploadMedia(
+export async function saveUploadedFile(
   formData: FormData,
+  uploadedById: string,
 ): Promise<{ id: string; url: string } | { error: string }> {
-  const admin = await getCurrentAdmin();
-  if (!admin) {
-    return { error: "Unauthorized." };
-  }
-
   const file = formData.get("file");
   if (!(file instanceof File)) {
     return { error: "No file provided." };
@@ -45,16 +41,25 @@ export async function uploadMedia(
   const buffer = Buffer.from(await file.arrayBuffer());
   await writeFile(path.join(uploadsDir, filename), buffer);
 
-  const media = await prisma.media.create({
+  return prisma.media.create({
     data: {
       url: `/uploads/${filename}`,
       type: "IMAGE",
       mimeType: file.type,
       sizeBytes: file.size,
-      uploadedById: admin.id,
+      uploadedById,
     },
     select: { id: true, url: true },
   });
+}
 
-  return media;
+export async function uploadMedia(
+  formData: FormData,
+): Promise<{ id: string; url: string } | { error: string }> {
+  const admin = await getCurrentAdmin();
+  if (!admin) {
+    return { error: "Unauthorized." };
+  }
+
+  return saveUploadedFile(formData, admin.id);
 }

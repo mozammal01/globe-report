@@ -14,4 +14,12 @@ export const siteConfig = {
   url: clientEnv.NEXT_PUBLIC_SITE_URL,
   locale: "en_US",
   nav: [{ title: "Home", href: "/" }] satisfies NavItem[],
+  legalNav: [
+    { title: "About", href: "/about" },
+    { title: "Contact", href: "/contact" },
+    { title: "Privacy", href: "/privacy" },
+    { title: "Terms", href: "/terms" },
+    { title: "Disclaimer", href: "/disclaimer" },
+    { title: "Cookies", href: "/cookies" },
+  ] satisfies NavItem[],
 } as const;

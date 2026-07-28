@@ -13,6 +13,7 @@ import { notFound } from "next/navigation";
 
 import { ArticleSection } from "@/components/home/article-section";
 import { CountryDetailSection } from "@/components/country/country-detail-section";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -22,6 +23,7 @@ import { siteConfig } from "@/config/site";
 import { formatCompactNumber } from "@/lib/format";
 import { getArticlesByCountry } from "@/lib/queries/articles";
 import { getCountryBySlug } from "@/lib/queries/countries";
+import { breadcrumbJsonLd, countryJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -83,25 +85,17 @@ export default async function CountryPage({
     country.interestingFacts.length,
   );
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Country",
-    name: country.name,
-    identifier: country.iso3,
-    description: country.seoDescription ?? undefined,
-    image: country.heroImageUrl ?? undefined,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${siteConfig.url}/countries/${country.slug}`,
-    },
-  };
+  const countryUrl = `${siteConfig.url}/countries/${country.slug}`;
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", url: siteConfig.url },
+    { name: "Countries", url: `${siteConfig.url}/countries` },
+    { name: country.name, url: countryUrl },
+  ]);
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={countryJsonLd(country, countryUrl)} />
+      <JsonLd data={breadcrumb} />
 
       {country.heroImageUrl && (
         <div className="bg-muted relative aspect-21/9 w-full overflow-hidden">

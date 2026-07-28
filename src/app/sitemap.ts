@@ -1,10 +1,14 @@
 import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/config/site";
+import { getArticleSlugsForSitemap } from "@/lib/queries/articles";
 import { getCountrySlugs } from "@/lib/queries/countries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const countries = await getCountrySlugs();
+  const [countries, articles] = await Promise.all([
+    getCountrySlugs(),
+    getArticleSlugsForSitemap(),
+  ]);
 
   return [
     {
@@ -30,6 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: country.updatedAt,
       changeFrequency: "weekly" as const,
       priority: 0.6,
+    })),
+    ...articles.map((article) => ({
+      url: `${siteConfig.url}/articles/${article.slug}`,
+      lastModified: article.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
     })),
   ];
 }

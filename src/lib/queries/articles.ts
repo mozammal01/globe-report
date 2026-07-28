@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 
@@ -45,28 +46,36 @@ export async function getLatestArticles(limit = 6, excludeId?: string) {
   });
 }
 
-export async function getTrendingArticles(limit = 4) {
-  const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+export const getTrendingArticles = unstable_cache(
+  async (limit = 4) => {
+    const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
 
-  return prisma.article.findMany({
-    where: {
-      status: "PUBLISHED",
-      publishedAt: { gte: since, lte: new Date() },
-    },
-    orderBy: { viewCount: "desc" },
-    take: limit,
-    select: articleCardSelect,
-  });
-}
+    return prisma.article.findMany({
+      where: {
+        status: "PUBLISHED",
+        publishedAt: { gte: since, lte: new Date() },
+      },
+      orderBy: { viewCount: "desc" },
+      take: limit,
+      select: articleCardSelect,
+    });
+  },
+  ["trending-articles"],
+  { revalidate: 120, tags: ["articles"] },
+);
 
-export async function getPopularArticles(limit = 4) {
-  return prisma.article.findMany({
-    where: publishedWhere(),
-    orderBy: [{ viewCount: "desc" }, { bookmarkCount: "desc" }],
-    take: limit,
-    select: articleCardSelect,
-  });
-}
+export const getPopularArticles = unstable_cache(
+  async (limit = 4) => {
+    return prisma.article.findMany({
+      where: publishedWhere(),
+      orderBy: [{ viewCount: "desc" }, { bookmarkCount: "desc" }],
+      take: limit,
+      select: articleCardSelect,
+    });
+  },
+  ["popular-articles"],
+  { revalidate: 120, tags: ["articles"] },
+);
 
 export async function getEditorsPicks(limit = 3) {
   return prisma.article.findMany({
@@ -77,7 +86,15 @@ export async function getEditorsPicks(limit = 3) {
   });
 }
 
-export async function getFeaturedCountries(limit = 8) {
+export const getFeaturedCountries = unstable_cache(
+  async (limit = 8) => {
+    return getFeaturedCountriesUncached(limit);
+  },
+  ["featured-countries"],
+  { revalidate: 120, tags: ["articles"] },
+);
+
+async function getFeaturedCountriesUncached(limit = 8) {
   const grouped = await prisma.article.groupBy({
     by: ["countryId"],
     where: { ...publishedWhere(), countryId: { not: null } },
@@ -165,6 +182,14 @@ export async function getRelatedArticles(
     orderBy: { publishedAt: "desc" },
     take: limit,
     select: articleCardSelect,
+  });
+}
+
+export async function getArticleSlugsForSitemap() {
+  return prisma.article.findMany({
+    where: publishedWhere(),
+    select: { slug: true, updatedAt: true },
+    orderBy: { publishedAt: "desc" },
   });
 }
 

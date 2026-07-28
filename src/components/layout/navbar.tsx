@@ -1,11 +1,16 @@
 import { Globe2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-import { GlobalSearch } from "@/components/search/global-search";
+import { UserNav } from "@/components/layout/user-nav";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/config/site";
+
+const GlobalSearch = dynamic(() =>
+  import("@/components/search/global-search").then((mod) => mod.GlobalSearch),
+);
 
 export function Navbar() {
   return (
@@ -34,6 +39,7 @@ export function Navbar() {
         <div className="flex items-center gap-1">
           <GlobalSearch />
           <ThemeToggle />
+          <UserNav />
           <MobileNav />
         </div>
       </Container>
