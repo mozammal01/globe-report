@@ -1,27 +1,36 @@
 import Link from "next/link";
 
-import { AdminPagination } from "@/components/admin/admin-pagination";
 import { ArticlesTable } from "@/components/admin/articles-table";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Pagination } from "@/components/ui/pagination";
 import { H1 } from "@/components/ui/typography";
+import {
+  ARTICLE_STATUSES,
+  type ArticleStatusValue,
+  type ContentTypeValue,
+} from "@/lib/constants/article";
 import { getAdminArticles } from "@/lib/queries/admin/articles";
-
-const STATUSES = ["DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED"] as const;
 
 export default async function AdminArticlesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ search?: string; status?: string; page?: string }>;
+  searchParams: Promise<{
+    search?: string;
+    status?: string;
+    contentType?: string;
+    page?: string;
+  }>;
 }) {
-  const { search, status, page: pageParam } = await searchParams;
+  const { search, status, contentType, page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
 
   const { articles, total, pageSize } = await getAdminArticles({
     search,
-    status: status as (typeof STATUSES)[number] | undefined,
+    status: status as ArticleStatusValue | undefined,
+    contentType: contentType as ContentTypeValue | undefined,
     page,
   });
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -45,11 +54,16 @@ export default async function AdminArticlesPage({
         />
         <NativeSelect name="status" defaultValue={status ?? ""}>
           <option value="">All statuses</option>
-          {STATUSES.map((s) => (
+          {ARTICLE_STATUSES.map((s) => (
             <option key={s} value={s}>
               {s}
             </option>
           ))}
+        </NativeSelect>
+        <NativeSelect name="contentType" defaultValue={contentType ?? ""}>
+          <option value="">All content types</option>
+          <option value="ARTICLE">Article</option>
+          <option value="GUIDE">Guide</option>
         </NativeSelect>
         <Button type="submit" variant="outline" size="sm">
           Filter
@@ -62,11 +76,11 @@ export default async function AdminArticlesPage({
         <EmptyState title="No articles found." />
       )}
 
-      <AdminPagination
+      <Pagination
         basePath="/admin/articles"
         page={page}
         totalPages={totalPages}
-        params={{ search, status }}
+        params={{ search, status, contentType }}
       />
     </div>
   );

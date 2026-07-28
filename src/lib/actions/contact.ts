@@ -2,10 +2,12 @@
 
 import { z } from "zod";
 
+import type { ActionState } from "@/lib/actions/admin/types";
 import { serverEnv } from "@/lib/env/server";
 import { contactNotificationEmail } from "@/lib/email/templates";
 import { resend } from "@/lib/email/resend";
 import { prisma } from "@/lib/prisma";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required.").max(100),
@@ -14,16 +16,20 @@ const contactSchema = z.object({
   message: z.string().min(1, "Message is required.").max(2000),
 });
 
-export type ContactFormState = {
-  status: "idle" | "success" | "error";
-  message?: string;
-  fieldErrors?: Record<string, string[]>;
-};
+export type ContactFormState = ActionState;
 
 export async function submitContactMessage(
   _prevState: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
+  const ip = await getClientIp();
+  if (!rateLimit(`contact:${ip}`, 5, 10 * 60_000)) {
+    return {
+      status: "error",
+      message: "Too many attempts. Please try again in a few minutes.",
+    };
+  }
+
   const parsed = contactSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),

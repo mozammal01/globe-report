@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleView } from "@/components/article/article-view";
 import { BookmarkButton } from "@/components/article/bookmark-button";
 import { ShareButtons } from "@/components/article/share-buttons";
 import { ViewTracker } from "@/components/article/view-tracker";
 import { ArticleSection } from "@/components/home/article-section";
+import { RecommendedSection } from "@/components/home/recommended-section";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -104,6 +106,8 @@ export default async function ArticlePage({
           <div className="flex flex-col gap-4">
             <ArticleView article={article} />
 
+            <AdSlot variant="in-article" />
+
             <div className="border-border flex flex-wrap items-center justify-between gap-3 border-t pt-6">
               <ShareButtons url={articleUrl} title={article.title} />
               <BookmarkButton articleId={article.id} />
@@ -125,6 +129,16 @@ export default async function ArticlePage({
         articles={related}
         cols={3}
         emptyMessage="No related articles yet."
+      />
+
+      <RecommendedSection
+        article={{
+          id: article.id,
+          countryId: article.countryId,
+          categoryId: article.categoryId,
+          tagSlugs: article.tags.map((tag) => tag.slug),
+        }}
+        excludeIds={related.map((item) => item.id)}
       />
     </>
   );

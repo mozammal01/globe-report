@@ -1,6 +1,7 @@
 import { Eye } from "lucide-react";
 
 import { ArticleBody } from "@/components/article/article-body";
+import { GuideToc } from "@/components/article/guide-toc";
 import { Badge } from "@/components/ui/badge";
 import { H1 } from "@/components/ui/typography";
 import { formatCompactNumber, formatDate } from "@/lib/format";
@@ -8,6 +9,7 @@ import { formatCompactNumber, formatDate } from "@/lib/format";
 type ArticleViewData = {
   title: string;
   content: string;
+  contentType: "ARTICLE" | "GUIDE";
   publishedAt: Date | null;
   readingTimeMinutes: number | null;
   viewCount: number;
@@ -18,9 +20,12 @@ type ArticleViewData = {
 };
 
 export function ArticleView({ article }: { article: ArticleViewData }) {
+  const isGuide = article.contentType === "GUIDE";
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
+        {isGuide && <Badge>Guide</Badge>}
         <Badge variant="secondary">{article.category.name}</Badge>
         {article.country && (
           <span className="text-muted-foreground text-sm">
@@ -50,8 +55,10 @@ export function ArticleView({ article }: { article: ArticleViewData }) {
         </span>
       </div>
 
+      {isGuide && <GuideToc content={article.content} />}
+
       <div className="border-border border-t pt-6">
-        <ArticleBody content={article.content} />
+        <ArticleBody content={article.content} withHeadingIds={isGuide} />
       </div>
 
       {article.tags.length > 0 && (

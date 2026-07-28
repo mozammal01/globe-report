@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-import { AdminPagination } from "@/components/admin/admin-pagination";
 import { CountriesTable } from "@/components/admin/countries-table";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
+import { Pagination } from "@/components/ui/pagination";
 import { H1 } from "@/components/ui/typography";
 import { getCountriesAdmin } from "@/lib/queries/admin/countries";
 
@@ -50,7 +50,7 @@ export default async function AdminCountriesPage({
         <EmptyState title="No countries found." />
       )}
 
-      <AdminPagination
+      <Pagination
         basePath="/admin/countries"
         page={page}
         totalPages={totalPages}

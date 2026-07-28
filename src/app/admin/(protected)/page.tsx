@@ -12,18 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { H1, H3, Muted } from "@/components/ui/typography";
 import { getCurrentAdmin } from "@/lib/auth/session";
+import { ARTICLE_STATUS_VARIANT } from "@/lib/constants/article";
 import { formatDate } from "@/lib/format";
 import { getDashboardStats } from "@/lib/queries/admin/dashboard";
-
-const STATUS_VARIANT: Record<
-  string,
-  "default" | "secondary" | "outline" | "destructive"
-> = {
-  DRAFT: "outline",
-  IN_REVIEW: "secondary",
-  PUBLISHED: "default",
-  ARCHIVED: "destructive",
-};
 
 export default async function AdminDashboardPage() {
   const [admin, stats] = await Promise.all([
@@ -92,7 +83,7 @@ export default async function AdminDashboardPage() {
                 >
                   <span className="truncate font-medium">{article.title}</span>
                   <span className="flex shrink-0 items-center gap-2">
-                    <Badge variant={STATUS_VARIANT[article.status]}>
+                    <Badge variant={ARTICLE_STATUS_VARIANT[article.status]}>
                       {isScheduled ? "SCHEDULED" : article.status}
                     </Badge>
                     <span className="text-muted-foreground text-xs">

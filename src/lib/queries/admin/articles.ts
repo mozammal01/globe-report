@@ -1,5 +1,9 @@
 import "server-only";
 
+import type {
+  ArticleStatusValue,
+  ContentTypeValue,
+} from "@/lib/constants/article";
 import { prisma } from "@/lib/prisma";
 import { articleCardSelect } from "@/lib/queries/articles";
 
@@ -8,16 +12,19 @@ const ADMIN_ARTICLES_PAGE_SIZE = 20;
 export async function getAdminArticles({
   search,
   status,
+  contentType,
   page = 1,
   pageSize = ADMIN_ARTICLES_PAGE_SIZE,
 }: {
   search?: string;
-  status?: "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED";
+  status?: ArticleStatusValue;
+  contentType?: ContentTypeValue;
   page?: number;
   pageSize?: number;
 } = {}) {
   const where = {
     ...(status ? { status } : {}),
+    ...(contentType ? { contentType } : {}),
     ...(search
       ? {
           OR: [

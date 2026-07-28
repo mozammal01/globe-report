@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { ActionState } from "@/lib/actions/admin/types";
 import { getCurrentAdmin } from "@/lib/auth/session";
+import { wouldCreateCycle } from "@/lib/category-cycle";
 import { prisma } from "@/lib/prisma";
 import { toSlug } from "@/lib/slug";
 
@@ -29,25 +30,11 @@ function readCategoryFormData(formData: FormData) {
   };
 }
 
-async function wouldCreateCycle(
-  categoryId: string,
-  proposedParentId: string,
-): Promise<boolean> {
-  if (proposedParentId === categoryId) return true;
-
-  let currentId: string | null = proposedParentId;
-  for (let i = 0; i < 50 && currentId; i++) {
-    const current: { parentId: string | null } | null =
-      await prisma.category.findUnique({
-        where: { id: currentId },
-        select: { parentId: true },
-      });
-    if (!current) return false;
-    if (current.parentId === categoryId) return true;
-    currentId = current.parentId;
-  }
-
-  return false;
+function getCategoryParent(id: string) {
+  return prisma.category.findUnique({
+    where: { id },
+    select: { parentId: true },
+  });
 }
 
 function revalidateCategoryPaths() {
@@ -127,7 +114,10 @@ export async function updateCategory(
 
   const data = parsed.data;
 
-  if (data.parentId && (await wouldCreateCycle(id, data.parentId))) {
+  if (
+    data.parentId &&
+    (await wouldCreateCycle(id, data.parentId, getCategoryParent))
+  ) {
     return {
       status: "error",
       message: "Please fix the errors below.",

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUp } from "@/lib/auth/client";
+import { isSafeRedirectPath } from "@/lib/utils";
 
 export function SignupForm({
   redirectTo = "/account",
@@ -39,7 +40,7 @@ export function SignupForm({
       return;
     }
 
-    router.push(redirectTo);
+    router.push(isSafeRedirectPath(redirectTo) ? redirectTo : "/");
     router.refresh();
   }
 

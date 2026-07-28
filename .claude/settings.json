@@ -117,7 +117,12 @@
       "Bash(MSYS_NO_PATHCONV=1 curl -s -o /dev/null -w \"admin-as-admin: %{http_code}\\\\n\" -b cookies.txt \"http://localhost:3000/admin\")",
       "Bash(MSYS_NO_PATHCONV=1 curl -s -b reader_cookies.txt http://localhost:3000/api/bookmarks/__TRACKED_VAR__)",
       "Bash(MSYS_NO_PATHCONV=1 curl -s http://localhost:3000/api/bookmarks/__TRACKED_VAR__)",
-      "Bash(pkill -f \"next dev\")"
+      "Bash(pkill -f \"next dev\")",
+      "Bash(sleep 10 && tail -40 /tmp/dev.log)",
+      "Bash(curl -s \"http://localhost:3000/articles/verify-guide-article\" -o _tmp_guide.html)",
+      "Bash(curl -s \"http://localhost:3000/countries/egypt\")",
+      "Bash(curl -s \"http://localhost:3000/countries/burundi\")",
+      "Bash(curl -s http://localhost:3000/ -o _tmp_home.html)"
     ],
     "additionalDirectories": [
       "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth",

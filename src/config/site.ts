@@ -13,7 +13,11 @@ export const siteConfig = {
     "Globe Report is a global news and knowledge portal delivering clear, reliable reporting on the stories that shape the world.",
   url: clientEnv.NEXT_PUBLIC_SITE_URL,
   locale: "en_US",
-  nav: [{ title: "Home", href: "/" }] satisfies NavItem[],
+  nav: [
+    { title: "Home", href: "/" },
+    { title: "News", href: "/news" },
+    { title: "Countries", href: "/countries" },
+  ] satisfies NavItem[],
   legalNav: [
     { title: "About", href: "/about" },
     { title: "Contact", href: "/contact" },

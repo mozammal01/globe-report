@@ -1,6 +1,7 @@
 import { Newspaper } from "lucide-react";
 import { Suspense } from "react";
 
+import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleSection } from "@/components/home/article-section";
 import { ArticleSectionSkeleton } from "@/components/home/article-section-skeleton";
 import { EditorsPicksSection } from "@/components/home/editors-picks-section";
@@ -9,6 +10,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import { PopularSection } from "@/components/home/popular-section";
 import { TrendingSection } from "@/components/home/trending-section";
+import { Container } from "@/components/ui/container";
 import { getHeroArticle, getLatestArticles } from "@/lib/queries/articles";
 
 export const revalidate = 60;
@@ -28,6 +30,10 @@ export default async function HomePage() {
         cols={3}
         className="border-t-0"
       />
+
+      <Container className="py-2">
+        <AdSlot variant="leaderboard" />
+      </Container>
 
       <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
         <TrendingSection />

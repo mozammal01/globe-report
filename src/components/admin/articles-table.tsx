@@ -15,18 +15,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteArticle } from "@/lib/actions/admin/articles";
+import { ARTICLE_STATUS_VARIANT } from "@/lib/constants/article";
 import { formatDate } from "@/lib/format";
 import type { AdminArticlesResult } from "@/lib/queries/admin/articles";
-
-const STATUS_VARIANT: Record<
-  string,
-  "default" | "secondary" | "outline" | "destructive"
-> = {
-  DRAFT: "outline",
-  IN_REVIEW: "secondary",
-  PUBLISHED: "default",
-  ARCHIVED: "destructive",
-};
 
 export function ArticlesTable({
   articles,
@@ -56,11 +47,16 @@ export function ArticlesTable({
           return (
             <TableRow key={article.id}>
               <TableCell className="max-w-64 truncate font-medium">
-                {article.title}
+                <span className="flex items-center gap-2">
+                  {article.title}
+                  {article.contentType === "GUIDE" && (
+                    <Badge variant="outline">Guide</Badge>
+                  )}
+                </span>
               </TableCell>
               <TableCell>{article.category.name}</TableCell>
               <TableCell>
-                <Badge variant={STATUS_VARIANT[article.status]}>
+                <Badge variant={ARTICLE_STATUS_VARIANT[article.status]}>
                   {isScheduled ? "SCHEDULED" : article.status}
                 </Badge>
               </TableCell>

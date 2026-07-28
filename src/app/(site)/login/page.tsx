@@ -14,6 +14,7 @@ import { siteConfig } from "@/config/site";
 export const metadata: Metadata = {
   title: "Sign In",
   alternates: { canonical: "/login" },
+  robots: { index: false },
 };
 
 export default async function LoginPage({
@@ -25,6 +26,7 @@ export default async function LoginPage({
 
   return (
     <div className="flex min-h-full flex-1 items-center justify-center px-4 py-16">
+      <h1 className="sr-only">Sign in to {siteConfig.name}</h1>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="font-heading text-xl">

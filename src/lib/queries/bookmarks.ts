@@ -13,6 +13,10 @@ export async function getUserBookmarks(userId: string) {
   return bookmarks.map((bookmark) => bookmark.article);
 }
 
+export async function getUserBookmarkCount(userId: string) {
+  return prisma.bookmark.count({ where: { userId } });
+}
+
 export async function isArticleBookmarked(userId: string, articleId: string) {
   const bookmark = await prisma.bookmark.findUnique({
     where: { userId_articleId: { userId, articleId } },

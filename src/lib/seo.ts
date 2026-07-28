@@ -53,10 +53,7 @@ export function countryJsonLd(country: CountryDetail, url: string) {
     identifier: country.iso3,
     description: country.seoDescription ?? undefined,
     image: country.heroImageUrl ?? undefined,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": url,
-    },
+    url,
   };
 }
 

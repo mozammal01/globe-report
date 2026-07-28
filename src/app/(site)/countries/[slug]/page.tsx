@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleSection } from "@/components/home/article-section";
 import { CountryDetailSection } from "@/components/country/country-detail-section";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -204,6 +205,12 @@ export default async function CountryPage({
           </div>
         </Container>
       </Section>
+
+      {hasRichContent && (
+        <Container size="narrow" className="pb-8">
+          <AdSlot variant="in-article" />
+        </Container>
+      )}
 
       <ArticleSection
         title={`Latest News from ${country.name}`}

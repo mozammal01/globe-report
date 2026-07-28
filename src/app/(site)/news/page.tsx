@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 
+import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleCard } from "@/components/home/article-card";
 import { NewsFilters } from "@/components/news/news-filters";
-import { Pagination } from "@/components/news/pagination";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Grid } from "@/components/ui/grid";
+import { Pagination } from "@/components/ui/pagination";
 import { Section } from "@/components/ui/section";
 import { H1, Lead } from "@/components/ui/typography";
 import { siteConfig } from "@/config/site";
@@ -51,21 +53,10 @@ export default async function NewsPage({
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
-  const selectedCategoryName = categories.find(
-    (item) => item.slug === category,
-  )?.name;
-  const selectedCountryName = countries.find(
-    (item) => item.slug === country,
-  )?.name;
-  const filterLabel = selectedCategoryName ?? selectedCountryName ?? tag;
-
-  const breadcrumb = breadcrumbJsonLd(
-    [
-      { name: "Home", url: siteConfig.url },
-      { name: "News", url: `${siteConfig.url}/news` },
-      filterLabel ? { name: filterLabel, url: `${siteConfig.url}/news` } : null,
-    ].filter((item): item is { name: string; url: string } => item !== null),
-  );
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", url: siteConfig.url },
+    { name: "News", url: `${siteConfig.url}/news` },
+  ]);
 
   return (
     <Section spacing="sm">
@@ -87,8 +78,16 @@ export default async function NewsPage({
 
         {articles.length > 0 ? (
           <Grid cols={3} className="mt-8">
-            {articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {articles.map((article, index) => (
+              <Fragment key={article.id}>
+                <ArticleCard article={article} />
+                {index === 5 && articles.length > 6 && (
+                  <AdSlot
+                    variant="in-feed"
+                    className="sm:col-span-2 lg:col-span-3"
+                  />
+                )}
+              </Fragment>
             ))}
           </Grid>
         ) : (
@@ -100,11 +99,10 @@ export default async function NewsPage({
 
         <div className="mt-10">
           <Pagination
+            basePath="/news"
             page={page}
             totalPages={totalPages}
-            category={category}
-            country={country}
-            tag={tag}
+            params={{ category, country, tag }}
           />
         </div>
       </Container>

@@ -18,12 +18,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { H3 } from "@/components/ui/typography";
 import { createArticle, updateArticle } from "@/lib/actions/admin/articles";
 import { IDLE_STATE } from "@/lib/actions/admin/types";
+import { ARTICLE_STATUSES } from "@/lib/constants/article";
 import type { AdminArticle } from "@/lib/queries/admin/articles";
 import type { CategoryOption } from "@/lib/queries/categories";
 import type { CountryOption } from "@/lib/queries/countries";
 import type { TagOption } from "@/lib/queries/tags";
 
-const STATUSES = ["DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED"] as const;
+const CONTENT_TYPE_OPTIONS = [
+  { value: "ARTICLE", label: "Article" },
+  { value: "GUIDE", label: "Guide" },
+] as const;
 
 function toDatetimeLocalValue(date: Date | null | undefined): string {
   if (!date) return "";
@@ -174,9 +178,28 @@ export function ArticleForm({
             name="status"
             defaultValue={article?.status ?? "DRAFT"}
           >
-            {STATUSES.map((status) => (
+            {ARTICLE_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {status}
+              </option>
+            ))}
+          </NativeSelect>
+        </FormField>
+
+        <FormField
+          label="Content type"
+          name="contentType"
+          hint="Guides get a table of contents and a Guide badge."
+          error={state.fieldErrors?.contentType}
+        >
+          <NativeSelect
+            id="contentType"
+            name="contentType"
+            defaultValue={article?.contentType ?? "ARTICLE"}
+          >
+            {CONTENT_TYPE_OPTIONS.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
               </option>
             ))}
           </NativeSelect>

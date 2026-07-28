@@ -4,23 +4,30 @@ import { randomUUID } from "crypto";
 
 import { z } from "zod";
 
+import type { ActionState } from "@/lib/actions/admin/types";
 import { newsletterConfirmationEmail } from "@/lib/email/templates";
 import { resend } from "@/lib/email/resend";
 import { prisma } from "@/lib/prisma";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
 const newsletterSchema = z.object({
   email: z.email({ error: "Please enter a valid email address." }),
 });
 
-export type NewsletterFormState = {
-  status: "idle" | "success" | "error";
-  message?: string;
-};
+export type NewsletterFormState = ActionState;
 
 export async function subscribeToNewsletter(
   _prevState: NewsletterFormState,
   formData: FormData,
 ): Promise<NewsletterFormState> {
+  const ip = await getClientIp();
+  if (!rateLimit(`newsletter:${ip}`, 5, 10 * 60_000)) {
+    return {
+      status: "error",
+      message: "Too many attempts. Please try again in a few minutes.",
+    };
+  }
+
   const parsed = newsletterSchema.safeParse({
     email: formData.get("email"),
   });

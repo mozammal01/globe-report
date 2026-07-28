@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatDate } from "@/lib/format";
+import { formatDate, toIsoStringSafe } from "@/lib/format";
 import type { ArticleCard as ArticleCardData } from "@/lib/queries/articles";
 
 export function ArticleCard({ article }: { article: ArticleCardData }) {
@@ -48,7 +48,7 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
         <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
           <span>{article.author.name}</span>
           <span aria-hidden>&middot;</span>
-          <time dateTime={article.publishedAt?.toISOString()}>
+          <time dateTime={toIsoStringSafe(article.publishedAt)}>
             {formatDate(article.publishedAt)}
           </time>
           {article.readingTimeMinutes && (

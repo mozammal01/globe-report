@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/lib/auth/client";
+import { isSafeRedirectPath } from "@/lib/utils";
 
 export function LoginForm({ redirectTo = "/admin" }: { redirectTo?: string }) {
   const router = useRouter();
@@ -30,7 +31,7 @@ export function LoginForm({ redirectTo = "/admin" }: { redirectTo?: string }) {
       return;
     }
 
-    router.push(redirectTo);
+    router.push(isSafeRedirectPath(redirectTo) ? redirectTo : "/");
     router.refresh();
   }
 

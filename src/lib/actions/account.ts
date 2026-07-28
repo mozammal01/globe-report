@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import type { ActionState } from "@/lib/actions/admin/types";
-import { saveUploadedFile } from "@/lib/actions/admin/media";
 import { getCurrentUser } from "@/lib/auth/session";
+import { saveUploadedFile } from "@/lib/media/save-uploaded-file";
 import { prisma } from "@/lib/prisma";
 
 const profileSchema = z.object({

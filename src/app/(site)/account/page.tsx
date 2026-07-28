@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { H1, Muted } from "@/components/ui/typography";
 import { getCurrentUser } from "@/lib/auth/session";
 import {
-  getUserBookmarks,
+  getUserBookmarkCount,
   getUserReadingHistory,
 } from "@/lib/queries/bookmarks";
 
@@ -13,8 +13,8 @@ export default async function AccountOverviewPage() {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const [bookmarks, history] = await Promise.all([
-    getUserBookmarks(user.id),
+  const [bookmarkCount, history] = await Promise.all([
+    getUserBookmarkCount(user.id),
     getUserReadingHistory(user.id, 5),
   ]);
 
@@ -33,9 +33,7 @@ export default async function AccountOverviewPage() {
                 <Bookmark className="text-primary size-4" aria-hidden />
               </span>
               <div className="flex flex-col">
-                <span className="text-xl font-semibold">
-                  {bookmarks.length}
-                </span>
+                <span className="text-xl font-semibold">{bookmarkCount}</span>
                 <span className="text-muted-foreground text-xs">Bookmarks</span>
               </div>
             </CardContent>

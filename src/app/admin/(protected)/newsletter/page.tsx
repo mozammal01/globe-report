@@ -1,9 +1,9 @@
-import { AdminPagination } from "@/components/admin/admin-pagination";
 import { NewsletterTable } from "@/components/admin/newsletter-table";
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
-import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/ui/pagination";
 import { H1 } from "@/components/ui/typography";
 import { getSubscribersAdmin } from "@/lib/queries/admin/newsletter";
 
@@ -55,7 +55,7 @@ export default async function AdminNewsletterPage({
         <EmptyState title="No subscribers found." />
       )}
 
-      <AdminPagination
+      <Pagination
         basePath="/admin/newsletter"
         page={page}
         totalPages={totalPages}

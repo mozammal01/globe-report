@@ -1,14 +1,18 @@
 import { P } from "@/components/ui/typography";
 import { isHtmlContent } from "@/lib/format";
 import { PROSE_CLASSNAME } from "@/lib/prose";
+import { injectHeadingIds } from "@/lib/toc";
 import { cn } from "@/lib/utils";
 
 export function ArticleBody({
   content,
   className,
+  withHeadingIds = false,
 }: {
   content: string;
   className?: string;
+  /** Adds anchor ids to h2/h3 so a table of contents can link into the body (used for Guide content). */
+  withHeadingIds?: boolean;
 }) {
   if (!isHtmlContent(content)) {
     const paragraphs = content
@@ -25,10 +29,12 @@ export function ArticleBody({
     );
   }
 
+  const html = withHeadingIds ? injectHeadingIds(content) : content;
+
   return (
     <div
       className={cn(PROSE_CLASSNAME, className)}
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }

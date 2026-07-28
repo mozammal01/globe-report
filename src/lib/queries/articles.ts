@@ -1,6 +1,7 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
 
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export const articleCardSelect = {
@@ -13,6 +14,7 @@ export const articleCardSelect = {
   viewCount: true,
   bookmarkCount: true,
   isFeatured: true,
+  contentType: true,
   category: { select: { name: true, slug: true } },
   country: { select: { name: true, flagEmoji: true } },
   coverImage: { select: { url: true, altText: true } },
@@ -185,6 +187,37 @@ export async function getRelatedArticles(
   });
 }
 
+export async function getRecommendedArticles(
+  article: {
+    id: string;
+    countryId: string | null;
+    categoryId: string;
+    tagSlugs?: string[];
+  },
+  excludeIds: string[] = [],
+  limit = 3,
+) {
+  const tagSlugs = article.tagSlugs ?? [];
+  const orConditions: Prisma.ArticleWhereInput[] = [];
+  if (article.countryId) orConditions.push({ countryId: article.countryId });
+  if (tagSlugs.length) {
+    orConditions.push({ tags: { some: { slug: { in: tagSlugs } } } });
+  }
+
+  return prisma.article.findMany({
+    where: {
+      ...publishedWhere(),
+      id: { notIn: [article.id, ...excludeIds] },
+      ...(orConditions.length
+        ? { OR: orConditions }
+        : { categoryId: { not: article.categoryId } }),
+    },
+    orderBy: { publishedAt: "desc" },
+    take: limit,
+    select: articleCardSelect,
+  });
+}
+
 export async function getArticleSlugsForSitemap() {
   return prisma.article.findMany({
     where: publishedWhere(),
@@ -200,6 +233,7 @@ export async function getArticleBySlug(slug: string) {
       ...articleCardSelect,
       content: true,
       categoryId: true,
+      countryId: true,
       seoTitle: true,
       seoDescription: true,
       updatedAt: true,

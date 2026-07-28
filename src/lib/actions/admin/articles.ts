@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { ActionState } from "@/lib/actions/admin/types";
 import { getCurrentAdmin } from "@/lib/auth/session";
+import { ARTICLE_STATUSES, CONTENT_TYPES } from "@/lib/constants/article";
 import { prisma } from "@/lib/prisma";
 import { toSlug } from "@/lib/slug";
 
@@ -19,7 +20,8 @@ const articleSchema = z.object({
     .transform((value) => toSlug(value)),
   excerpt: z.string().max(500).optional(),
   content: z.string().min(1, "Content is required."),
-  status: z.enum(["DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED"]),
+  status: z.enum(ARTICLE_STATUSES),
+  contentType: z.enum(CONTENT_TYPES),
   isFeatured: z.boolean(),
   publishedAt: z.string().optional(),
   categoryId: z.string().min(1, "Category is required."),
@@ -57,6 +59,7 @@ function readArticleFormData(formData: FormData) {
     excerpt: formData.get("excerpt") || undefined,
     content: formData.get("content"),
     status: formData.get("status"),
+    contentType: formData.get("contentType") || "ARTICLE",
     isFeatured: formData.get("isFeatured") === "on",
     publishedAt: formData.get("publishedAt") || undefined,
     categoryId: formData.get("categoryId"),
@@ -125,6 +128,7 @@ export async function createArticle(
         excerpt: data.excerpt,
         content: sanitizedContent,
         status: data.status,
+        contentType: data.contentType,
         isFeatured: data.isFeatured,
         publishedAt,
         readingTimeMinutes: computeReadingTime(sanitizedContent),
@@ -196,6 +200,7 @@ export async function updateArticle(
         excerpt: data.excerpt,
         content: sanitizedContent,
         status: data.status,
+        contentType: data.contentType,
         isFeatured: data.isFeatured,
         publishedAt,
         readingTimeMinutes: computeReadingTime(sanitizedContent),

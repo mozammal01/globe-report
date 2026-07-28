@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { H1 } from "@/components/ui/typography";
-import { formatDate } from "@/lib/format";
+import { siteConfig } from "@/config/site";
+import { formatDate, toIsoStringSafe } from "@/lib/format";
 import type { ArticleCard } from "@/lib/queries/articles";
 
 export function HeroSection({ article }: { article: ArticleCard | null }) {
   if (!article) {
     return (
       <Container className="py-16">
+        <h1 className="sr-only">{siteConfig.name}</h1>
         <EmptyState
           title="No articles published yet"
           description="Check back soon for the latest stories."
@@ -62,7 +64,7 @@ export function HeroSection({ article }: { article: ArticleCard | null }) {
           <div className="flex items-center gap-3 text-sm text-white/70">
             <span>{article.author.name}</span>
             <span aria-hidden>&middot;</span>
-            <time dateTime={article.publishedAt?.toISOString()}>
+            <time dateTime={toIsoStringSafe(article.publishedAt)}>
               {formatDate(article.publishedAt)}
             </time>
           </div>
