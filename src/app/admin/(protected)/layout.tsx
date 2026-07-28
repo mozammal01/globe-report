@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { Container } from "@/components/ui/container";
 import { getCurrentAdmin } from "@/lib/auth/session";
@@ -36,8 +37,12 @@ export default async function AdminProtectedLayout({
           <SignOutButton />
         </Container>
       </header>
-      <Container as="main" className="flex-1 py-10">
-        {children}
+      <Container
+        as="main"
+        className="flex flex-1 flex-col gap-8 py-10 sm:flex-row"
+      >
+        <AdminSidebar />
+        <div className="min-w-0 flex-1">{children}</div>
       </Container>
     </div>
   );

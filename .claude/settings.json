@@ -82,7 +82,17 @@
       "Bash(npm install *)",
       "Bash(curl -s http://localhost:3003/api/search?q=climate)",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>console.log\\(JSON.stringify\\(JSON.parse\\(d\\),null,2\\)\\)\\)\")",
-      "Bash(curl -s http://localhost:3003/api/search?q=bangladesh)"
+      "Bash(curl -s http://localhost:3003/api/search?q=bangladesh)",
+      "Bash(curl -s http://localhost:3000/articles/central-banks-coordinated-approach-rates)",
+      "Bash(curl -s -c 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' -X POST http://localhost:3000/api/auth/sign-in/email -H 'Content-Type: application/json' -d '{\"email\":\"admin@globereport.com\",\"password\":\"Admin#12345\"}' -w '\\\\nHTTP %{http_code}\\\\n')",
+      "Bash(curl -s -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin)",
+      "Bash(curl -s -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin/articles)",
+      "Bash(curl -s -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin/articles/new)",
+      "Bash(curl -s -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin/countries)",
+      "Bash(curl -s -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin/tags)",
+      "Bash(curl -s -o /dev/null -w 'retry1: %{http_code}\\\\n' -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin)",
+      "Bash(grep -v \"SECURITY WARNING\\\\|next major version\\\\|prepare for this\\\\|If you want\\\\|libpq\\\\|trace-warnings\\\\|^$\")",
+      "Bash(curl -s -b 'C:\\\\Users\\\\itspr\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Mozammal-Projects-globe-report\\\\1d43bf07-e09a-4d29-b391-46314acaa5d9\\\\scratchpad/admin-cookies.txt' http://localhost:3000/admin/categories)"
     ],
     "additionalDirectories": [
       "D:\\Mozammal\\Projects\\worldNest\\src\\app\\api\\auth",

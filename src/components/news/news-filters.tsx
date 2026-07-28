@@ -4,11 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { NativeSelect } from "@/components/ui/native-select";
 import type { CategoryOption } from "@/lib/queries/categories";
 import type { CountryOption } from "@/lib/queries/countries";
-
-const selectClassName =
-  "border-input h-8 rounded-lg border bg-transparent px-2.5 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30";
 
 export function NewsFilters({
   categories,
@@ -45,13 +43,12 @@ export function NewsFilters({
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <select
+      <NativeSelect
         aria-label="Filter by category"
         value={selectedCategory ?? ""}
         onChange={(event) =>
           router.push(hrefFor({ category: event.target.value || undefined }))
         }
-        className={selectClassName}
       >
         <option value="">All categories</option>
         {categories.map((category) => (
@@ -59,15 +56,14 @@ export function NewsFilters({
             {category.name}
           </option>
         ))}
-      </select>
+      </NativeSelect>
 
-      <select
+      <NativeSelect
         aria-label="Filter by country"
         value={selectedCountry ?? ""}
         onChange={(event) =>
           router.push(hrefFor({ country: event.target.value || undefined }))
         }
-        className={selectClassName}
       >
         <option value="">All countries</option>
         {[...regions.entries()].map(([region, list]) => (
@@ -79,7 +75,7 @@ export function NewsFilters({
             ))}
           </optgroup>
         ))}
-      </select>
+      </NativeSelect>
 
       {hasActiveFilters && (
         <Button variant="ghost" size="sm" asChild>

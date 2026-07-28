@@ -15,6 +15,7 @@ export async function searchAll(query: string) {
     prisma.article.findMany({
       where: {
         status: "PUBLISHED",
+        publishedAt: { lte: new Date() },
         title: { contains: trimmed, mode: "insensitive" },
       },
       orderBy: { publishedAt: "desc" },

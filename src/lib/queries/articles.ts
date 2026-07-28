@@ -2,7 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 
-const articleCardSelect = {
+export const articleCardSelect = {
   id: true,
   title: true,
   slug: true,
@@ -18,9 +18,16 @@ const articleCardSelect = {
   author: { select: { name: true } },
 } as const;
 
+// Re-evaluated on every call (not a module-level constant) so scheduled
+// articles actually become visible once their publishedAt passes, without
+// requiring a redeploy.
+function publishedWhere() {
+  return { status: "PUBLISHED" as const, publishedAt: { lte: new Date() } };
+}
+
 export async function getHeroArticle() {
   return prisma.article.findFirst({
-    where: { status: "PUBLISHED" },
+    where: publishedWhere(),
     orderBy: [{ isFeatured: "desc" }, { publishedAt: "desc" }],
     select: articleCardSelect,
   });
@@ -29,7 +36,7 @@ export async function getHeroArticle() {
 export async function getLatestArticles(limit = 6, excludeId?: string) {
   return prisma.article.findMany({
     where: {
-      status: "PUBLISHED",
+      ...publishedWhere(),
       ...(excludeId ? { id: { not: excludeId } } : {}),
     },
     orderBy: { publishedAt: "desc" },
@@ -42,7 +49,10 @@ export async function getTrendingArticles(limit = 4) {
   const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
 
   return prisma.article.findMany({
-    where: { status: "PUBLISHED", publishedAt: { gte: since } },
+    where: {
+      status: "PUBLISHED",
+      publishedAt: { gte: since, lte: new Date() },
+    },
     orderBy: { viewCount: "desc" },
     take: limit,
     select: articleCardSelect,
@@ -51,7 +61,7 @@ export async function getTrendingArticles(limit = 4) {
 
 export async function getPopularArticles(limit = 4) {
   return prisma.article.findMany({
-    where: { status: "PUBLISHED" },
+    where: publishedWhere(),
     orderBy: [{ viewCount: "desc" }, { bookmarkCount: "desc" }],
     take: limit,
     select: articleCardSelect,
@@ -60,7 +70,7 @@ export async function getPopularArticles(limit = 4) {
 
 export async function getEditorsPicks(limit = 3) {
   return prisma.article.findMany({
-    where: { status: "PUBLISHED", isFeatured: true },
+    where: { ...publishedWhere(), isFeatured: true },
     orderBy: { publishedAt: "desc" },
     take: limit,
     select: articleCardSelect,
@@ -70,7 +80,7 @@ export async function getEditorsPicks(limit = 3) {
 export async function getFeaturedCountries(limit = 8) {
   const grouped = await prisma.article.groupBy({
     by: ["countryId"],
-    where: { status: "PUBLISHED", countryId: { not: null } },
+    where: { ...publishedWhere(), countryId: { not: null } },
     _count: { _all: true },
     orderBy: { _count: { countryId: "desc" } },
     take: limit,
@@ -99,7 +109,7 @@ export async function getFeaturedCountries(limit = 8) {
 
 export async function getArticlesByCountry(countryId: string, limit = 6) {
   return prisma.article.findMany({
-    where: { status: "PUBLISHED", countryId },
+    where: { ...publishedWhere(), countryId },
     orderBy: { publishedAt: "desc" },
     take: limit,
     select: articleCardSelect,
@@ -122,7 +132,7 @@ export async function getArticles({
   pageSize?: number;
 } = {}) {
   const where = {
-    status: "PUBLISHED" as const,
+    ...publishedWhere(),
     ...(categorySlug ? { category: { slug: categorySlug } } : {}),
     ...(countrySlug ? { country: { slug: countrySlug } } : {}),
     ...(tagSlug ? { tags: { some: { slug: tagSlug } } } : {}),
@@ -148,7 +158,7 @@ export async function getRelatedArticles(
 ) {
   return prisma.article.findMany({
     where: {
-      status: "PUBLISHED",
+      ...publishedWhere(),
       id: { not: article.id },
       categoryId: article.categoryId,
     },
@@ -160,7 +170,7 @@ export async function getRelatedArticles(
 
 export async function getArticleBySlug(slug: string) {
   return prisma.article.findFirst({
-    where: { slug, status: "PUBLISHED" },
+    where: { slug, ...publishedWhere() },
     select: {
       ...articleCardSelect,
       content: true,

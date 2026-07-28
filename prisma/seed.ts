@@ -4,25 +4,12 @@ import { hashPassword } from "better-auth/crypto";
 
 import { PrismaClient } from "../src/generated/prisma/client";
 import { ROLE, ROLE_DEFINITIONS } from "../src/lib/rbac";
+import { toSlug } from "../src/lib/slug";
 import { articles } from "./seed-data/articles";
 import { categories } from "./seed-data/categories";
 import { countryDetails } from "./seed-data/country-details";
 import { countries } from "./seed-data/countries";
 import { tags } from "./seed-data/tags";
-
-const COMBINING_DIACRITICS = new RegExp(
-  "[" + String.fromCharCode(0x0300) + "-" + String.fromCharCode(0x036f) + "]",
-  "g",
-);
-
-function toSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(COMBINING_DIACRITICS, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
 
 function toFlagEmoji(iso2: string): string {
   return iso2
