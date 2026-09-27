@@ -6,9 +6,26 @@ const clientEnvSchema = z.object({
   }),
 });
 
+function getSiteUrl() {
+  let url = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!url && process.env.NEXT_PUBLIC_VERCEL_URL) {
+    url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+  }
+  if (!url && process.env.VERCEL_URL) {
+    url = `https://${process.env.VERCEL_URL}`;
+  }
+  if (!url) {
+    url = "http://localhost:3000";
+  }
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = `https://${url}`;
+  }
+  return url;
+}
+
 function parseClientEnv() {
   const parsed = clientEnvSchema.safeParse({
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_SITE_URL: getSiteUrl(),
   });
 
   if (!parsed.success) {
