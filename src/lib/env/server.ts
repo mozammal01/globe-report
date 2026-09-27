@@ -16,6 +16,13 @@ const serverEnvSchema = z.object({
 });
 
 function parseServerEnv() {
+  if (
+    process.env.SKIP_ENV_VALIDATION === "true" ||
+    process.env.SKIP_ENV_VALIDATION === "1"
+  ) {
+    return process.env as unknown as z.infer<typeof serverEnvSchema>;
+  }
+
   const parsed = serverEnvSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
