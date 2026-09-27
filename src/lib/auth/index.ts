@@ -11,7 +11,10 @@ import { ROLE } from "@/lib/rbac";
 export const auth = betterAuth({
   secret: serverEnv.BETTER_AUTH_SECRET,
   baseURL: clientEnv.NEXT_PUBLIC_SITE_URL,
-  trustedOrigins: [clientEnv.NEXT_PUBLIC_SITE_URL],
+  trustedOrigins: [
+    clientEnv.NEXT_PUBLIC_SITE_URL,
+    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+  ],
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   user: {
     fields: {
