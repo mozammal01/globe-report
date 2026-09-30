@@ -1,3 +1,4 @@
+import { StickyMobileAd } from "@/components/ads/sticky-mobile-ad";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -15,6 +16,7 @@ export default function SiteLayout({
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />
+      <StickyMobileAd />
     </>
   );
 }

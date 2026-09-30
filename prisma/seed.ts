@@ -184,7 +184,9 @@ async function seedArticles() {
     const publishedAt = new Date(
       Date.now() - article.daysAgo * 24 * 60 * 60 * 1000,
     );
-    const coverImageUrl = `https://picsum.photos/seed/${article.coverSeed}/1200/800`;
+    const coverImageUrl =
+      article.coverUrl ??
+      `https://picsum.photos/seed/${article.coverSeed}/1200/800`;
     const content = article.content.join("\n\n");
     const readingTimeMinutes = estimateReadingMinutes(article.content);
 

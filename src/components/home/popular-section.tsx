@@ -8,11 +8,12 @@ export async function PopularSection() {
 
   return (
     <ArticleSection
-      title="Popular"
-      description="All-time reader favorites"
+      title="Popular Stories"
+      description="Most read and reader favorites"
       icon={Flame}
       articles={popular}
       cols={4}
+      viewAllHref="/blog"
     />
   );
 }

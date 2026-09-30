@@ -55,4 +55,38 @@ export const categories: CategorySeed[] = [
     slug: "entertainment",
     description: "Film, television, and media.",
   },
+  {
+    name: "Movies",
+    slug: "movies",
+    description: "In-depth movie reviews, plot breakdowns, and cinema news.",
+  },
+  {
+    name: "Web Series",
+    slug: "web-series",
+    description:
+      "Binge-worthy TV shows, season recaps, and episode explanations.",
+  },
+  {
+    name: "Ending Explained",
+    slug: "ending-explained",
+    description:
+      "Climax breakdowns, hidden plot twists, and movie ending theories.",
+  },
+  {
+    name: "Anime",
+    slug: "anime",
+    description: "Anime lore, character breakdowns, and season reviews.",
+  },
+  {
+    name: "Reviews",
+    slug: "reviews",
+    description:
+      "Honest movie ratings, critiques, and viewing recommendations.",
+  },
+  {
+    name: "Streaming Guides",
+    slug: "streaming-guides",
+    description:
+      "Where to watch the latest movies legally on Netflix, Prime, and more.",
+  },
 ];

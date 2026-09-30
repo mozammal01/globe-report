@@ -69,3 +69,72 @@ export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
     })),
   };
 }
+
+export type MovieReviewLdData = {
+  movieTitle: string;
+  movieImage?: string;
+  director?: string;
+  actors?: string[];
+  releaseYear?: number | string;
+  ratingValue?: number | string;
+  bestRating?: number | string;
+  reviewHeadline: string;
+  reviewBody?: string;
+  authorName: string;
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+};
+
+export function movieReviewJsonLd(data: MovieReviewLdData) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    headline: data.reviewHeadline,
+    reviewBody: data.reviewBody,
+    url: data.url,
+    datePublished: data.datePublished,
+    dateModified: data.dateModified,
+    author: {
+      "@type": "Person",
+      name: data.authorName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+    itemReviewed: {
+      "@type": "Movie",
+      name: data.movieTitle,
+      image: data.movieImage,
+      dateCreated: data.releaseYear ? String(data.releaseYear) : undefined,
+      ...(data.director
+        ? {
+            director: {
+              "@type": "Person",
+              name: data.director,
+            },
+          }
+        : {}),
+      ...(data.actors && data.actors.length > 0
+        ? {
+            actor: data.actors.map((actor) => ({
+              "@type": "Person",
+              name: actor,
+            })),
+          }
+        : {}),
+    },
+    ...(data.ratingValue
+      ? {
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: String(data.ratingValue),
+            bestRating: String(data.bestRating ?? 10),
+            worstRating: "1",
+          },
+        }
+      : {}),
+  };
+}

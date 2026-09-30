@@ -5,7 +5,10 @@ import { createAuthClient } from "better-auth/react";
 import { clientEnv } from "@/lib/env/client";
 
 export const authClient = createAuthClient({
-  baseURL: clientEnv.NEXT_PUBLIC_SITE_URL,
+  baseURL:
+    typeof window !== "undefined"
+      ? window.location.origin
+      : clientEnv.NEXT_PUBLIC_SITE_URL,
 });
 
 export const { signIn, signUp, signOut, changePassword, useSession } =

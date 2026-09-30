@@ -3,7 +3,9 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 
 import "./globals.css";
 
+import { Suspense } from "react";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { TopLoader } from "@/components/shared/top-loader";
 import { siteConfig } from "@/config/site";
 
 const fontSans = Geist({
@@ -97,6 +99,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Suspense fallback={null}>
+            <TopLoader />
+          </Suspense>
           {children}
         </ThemeProvider>
       </body>

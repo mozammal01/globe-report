@@ -12,14 +12,16 @@ import { CommentSection } from "@/components/article/comment-section";
 import { ReadingProgressBar } from "@/components/article/reading-progress-bar";
 import { ShareButtons } from "@/components/article/share-buttons";
 import { ViewTracker } from "@/components/article/view-tracker";
+import { MovieInfoCard } from "@/components/entertainment/movie-info-card";
 import { ArticleSection } from "@/components/home/article-section";
 import { RecommendedSection } from "@/components/home/recommended-section";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { siteConfig } from "@/config/site";
+import { getMovieMetadataBySlug } from "@/lib/movies";
 import { getArticleBySlug, getRelatedArticles } from "@/lib/queries/articles";
-import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { articleJsonLd, breadcrumbJsonLd, movieReviewJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -85,11 +87,36 @@ export default async function ArticlePage({
     { name: article.title, url: articleUrl },
   ]);
 
+  const movieMeta = getMovieMetadataBySlug(article.slug);
+
   return (
     <>
       <ReadingProgressBar />
       <JsonLd data={articleJsonLd(article, articleUrl)} />
       <JsonLd data={breadcrumb} />
+      {movieMeta && (
+        <JsonLd
+          data={movieReviewJsonLd({
+            movieTitle: movieMeta.title,
+            movieImage: article.coverImage?.url,
+            director:
+              typeof movieMeta.director === "string"
+                ? movieMeta.director
+                : undefined,
+            actors: movieMeta.cast,
+            releaseYear: movieMeta.releaseYear,
+            ratingValue: movieMeta.imdbRating
+              ? String(movieMeta.imdbRating).replace("/10", "").trim()
+              : undefined,
+            reviewHeadline: article.title,
+            reviewBody: article.excerpt ?? undefined,
+            authorName: article.author.name,
+            url: articleUrl,
+            datePublished: article.publishedAt?.toISOString(),
+            dateModified: article.updatedAt.toISOString(),
+          })}
+        />
+      )}
       <ViewTracker articleId={article.id} />
 
       {article.coverImage && (
@@ -108,6 +135,7 @@ export default async function ArticlePage({
       <Section spacing="sm">
         <Container size="narrow">
           <div className="flex flex-col gap-6">
+            {movieMeta && <MovieInfoCard {...movieMeta} />}
             <ArticleView article={article} />
 
             <AdSlot variant="in-article" />

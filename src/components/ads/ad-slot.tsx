@@ -14,8 +14,11 @@ const adSlotVariants = cva(
       variant: {
         leaderboard: "min-h-22.5 sm:min-h-32",
         "in-article": "min-h-62.5",
+        "in-article-sm": "min-h-32",
         "in-feed": "min-h-50",
         sidebar: "min-h-75 w-full sm:max-w-75",
+        "sidebar-sticky": "min-h-75 w-full sticky top-20 sm:max-w-75",
+        "mobile-anchor": "min-h-12.5 w-full max-w-sm mx-auto",
       },
     },
     defaultVariants: {

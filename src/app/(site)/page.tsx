@@ -24,15 +24,21 @@ export default async function HomePage() {
     <>
       <HeroSection article={hero} />
 
-      <FeaturedCategoriesSection />
-
       <ArticleSection
-        title="Latest Stories"
+        title="Recent Stories"
+        description="Freshly published articles, reviews, and explanations"
         icon={Sparkles}
         articles={latest}
         cols={3}
         className="border-t-0"
+        viewAllHref="/blog"
       />
+
+      <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
+        <PopularSection />
+      </Suspense>
+
+      <FeaturedCategoriesSection />
 
       <Container className="py-2">
         <AdSlot variant="leaderboard" />
@@ -40,10 +46,6 @@ export default async function HomePage() {
 
       <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
         <TrendingSection />
-      </Suspense>
-
-      <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
-        <PopularSection />
       </Suspense>
 
       <Suspense fallback={<ArticleSectionSkeleton cols={4} count={4} />}>
