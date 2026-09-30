@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 
+import { siteConfig } from "@/config/site";
 import type { ActionState } from "@/lib/actions/admin/types";
 import { serverEnv } from "@/lib/env/server";
 import { contactNotificationEmail } from "@/lib/email/templates";
@@ -50,7 +51,7 @@ export async function submitContactMessage(
   try {
     const { subject, html } = contactNotificationEmail(parsed.data);
     await resend.emails.send({
-      from: "Globe Report <onboarding@resend.dev>",
+      from: `${siteConfig.name} <onboarding@resend.dev>`,
       to: serverEnv.CONTACT_EMAIL,
       replyTo: parsed.data.email,
       subject,

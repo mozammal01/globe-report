@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 
 import { z } from "zod";
 
+import { siteConfig } from "@/config/site";
 import type { ActionState } from "@/lib/actions/admin/types";
 import { newsletterConfirmationEmail } from "@/lib/email/templates";
 import { resend } from "@/lib/email/resend";
@@ -60,7 +61,7 @@ export async function subscribeToNewsletter(
   try {
     const { subject, html } = newsletterConfirmationEmail(token);
     await resend.emails.send({
-      from: "Globe Report <onboarding@resend.dev>",
+      from: `${siteConfig.name} <onboarding@resend.dev>`,
       to: email,
       subject,
       html,

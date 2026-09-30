@@ -626,7 +626,7 @@ export function ArticleForm({
               Live Google Search Preview
             </span>
             <div className="text-muted-foreground flex items-center gap-1.5 truncate text-xs">
-              <span>https://globereport.com</span>
+              <span>https://cineshortsworld.com</span>
               <span>›</span>
               <span>articles</span>
               <span>›</span>

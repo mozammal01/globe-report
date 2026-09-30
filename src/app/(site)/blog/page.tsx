@@ -20,9 +20,8 @@ import { breadcrumbJsonLd } from "@/lib/seo";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Blog — Insights, Stories & Tutorials",
-  description:
-    "Explore the latest articles, thoughtful essays, technology trends, and world analyses on the Globe Report blog.",
+  title: "Blog — Movie Stories, Ending Explanations & Theories",
+  description: `Explore the latest movie articles, ending explanations, viral clips, and cinema theories on the ${siteConfig.name} blog.`,
   alternates: { canonical: "/blog" },
 };
 

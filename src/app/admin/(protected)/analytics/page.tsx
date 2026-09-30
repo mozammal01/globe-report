@@ -47,7 +47,7 @@ export default async function AdminAnalyticsPage() {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-1">
         <H1>Analytics</H1>
-        <Muted>Reader engagement across Globe Report.</Muted>
+        <Muted>Reader engagement across CineShortsWorld.</Muted>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

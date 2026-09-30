@@ -6,11 +6,11 @@ export type NavItem = {
 };
 
 export const siteConfig = {
-  name: "Globe Report",
-  shortName: "Globe Blog",
-  tagline: "Stories, Ideas & Global Perspectives",
+  name: "CineShortsWorld",
+  shortName: "CineShorts",
+  tagline: "Viral Movie Shorts, Ending Explanations & Cinema Theories",
   description:
-    "Globe Report is a modern blog and digital publication delivering in-depth articles, technology insights, and thought-provoking stories.",
+    "CineShortsWorld is your ultimate destination for in-depth movie ending explanations, viral film breakdowns, web series theories, and honest cinema reviews.",
   url: clientEnv.NEXT_PUBLIC_SITE_URL,
   locale: "en_US",
   nav: [

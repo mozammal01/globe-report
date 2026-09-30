@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { H1, P } from "@/components/ui/typography";
+import { siteConfig } from "@/config/site";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default async function NewsletterUnsubscribePage({
           <H1>{subscriber ? "You've been unsubscribed" : "Invalid link"}</H1>
           <P className="text-muted-foreground">
             {subscriber
-              ? "You won't receive any more emails from Globe Report. You can resubscribe anytime."
+              ? `You won't receive any more emails from ${siteConfig.name}. You can resubscribe anytime.`
               : "This unsubscribe link is no longer valid."}
           </P>
           <Link

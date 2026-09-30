@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `Learn about ${siteConfig.name}'s mission to deliver clear, reliable global news.`,
+  description: `Learn about ${siteConfig.name}'s mission to deliver in-depth movie ending explanations, viral cinema theories, and reviews.`,
   alternates: { canonical: "/about" },
 };
 
@@ -16,23 +16,28 @@ export default function AboutPage() {
       description={siteConfig.tagline}
     >
       <p>
-        {siteConfig.name} is a global news and knowledge portal delivering
-        clear, reliable reporting on the stories that shape the world. We cover
-        politics, economics, culture, and country-level developments with an
-        emphasis on accuracy and context over noise.
+        {siteConfig.name} is a premier entertainment and cinema analysis portal
+        delivering deep-dive movie ending explanations, hidden Easter eggs,
+        character breakdowns, and streaming guides. We bridge the gap between
+        viral short-form clips and comprehensive, thought-provoking film
+        theories.
       </p>
-      <h2>Our mission</h2>
+      <h2>Our Mission</h2>
       <p>
-        We believe understanding the world shouldn&apos;t require wading through
-        jargon or sensationalism. Every article we publish aims to give readers
-        the context they need to understand not just what happened, but why it
-        matters.
+        We believe that great cinema and storytelling deserve meaningful
+        analysis. Every article we publish aims to give film lovers and series
+        bingers the context they need to unravel complex twists, uncover hidden
+        foreshadowing, and understand the thematic core of the world&apos;s
+        biggest blockbusters.
       </p>
-      <h2>What we cover</h2>
+      <h2>What We Cover</h2>
       <ul>
-        <li>Breaking and in-depth news from every region of the world</li>
-        <li>Country profiles with economic, cultural, and travel context</li>
-        <li>Analysis that connects local events to global trends</li>
+        <li>In-depth Ending Explanations & Climax Theories</li>
+        <li>Post-Credit Scene Breakdowns & Cinematic Universe Connections</li>
+        <li>
+          Spoiler-Free Movie & Web Series Reviews with OTT Streaming Guides
+        </li>
+        <li>Hidden Symbolism, Easter Eggs & Comic Lore Analysis</li>
       </ul>
       <h2>Get in touch</h2>
       <p>

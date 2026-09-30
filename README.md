@@ -1,6 +1,6 @@
-# Globe Report
+# CineShortsWorld
 
-Global News & Knowledge Portal — a public news/content site with an admin dashboard, user accounts, and a newsletter.
+Cinema, Movie Ending Explanations & Viral Theories Portal — a public entertainment blog with an admin creator studio, user accounts, and AdSense-optimized monetization.
 
 ## Stack
 

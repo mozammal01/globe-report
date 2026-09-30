@@ -43,7 +43,9 @@ export default async function AdminDashboardPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
           <H1>Welcome, {admin?.name}</H1>
-          <Muted>Here&apos;s what&apos;s happening across Globe Report.</Muted>
+          <Muted>
+            Here&apos;s what&apos;s happening across CineShortsWorld.
+          </Muted>
         </div>
         <div className="flex items-center gap-2">
           <Button asChild variant="outline" size="sm">
