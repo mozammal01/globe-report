@@ -8,11 +8,13 @@ import {
   Mail,
   MessageSquare,
   Newspaper,
+  PenSquare,
   Tag,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -31,6 +33,16 @@ export function AdminSidebar() {
 
   return (
     <nav className="flex w-full shrink-0 flex-col gap-1 sm:w-48">
+      <Button
+        asChild
+        className="mb-2 w-full gap-2 font-semibold shadow-xs"
+        size="sm"
+      >
+        <Link href="/admin/articles/new">
+          <PenSquare className="size-4" aria-hidden="true" />
+          <span>Write Blog</span>
+        </Link>
+      </Button>
       {links.map((link) => {
         const isActive =
           link.href === "/admin"

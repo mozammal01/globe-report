@@ -1,5 +1,4 @@
-"use client";
-
+import { PenSquare } from "lucide-react";
 import Link from "next/link";
 
 import { UserMenu } from "@/components/layout/user-menu";
@@ -27,5 +26,22 @@ export function UserNav() {
     );
   }
 
-  return <UserMenu name={session.user.name} />;
+  return (
+    <div className="flex items-center gap-1.5 sm:gap-2">
+      <Button
+        variant="default"
+        size="sm"
+        asChild
+        className="gap-1.5 px-2.5 font-medium shadow-xs sm:px-3"
+      >
+        <Link href="/admin/articles/new" aria-label="Write a new blog post">
+          <PenSquare className="size-3.5" aria-hidden="true" />
+          <span>
+            Write<span className="xs:inline hidden sm:inline"> Blog</span>
+          </span>
+        </Link>
+      </Button>
+      <UserMenu name={session.user.name} />
+    </div>
+  );
 }

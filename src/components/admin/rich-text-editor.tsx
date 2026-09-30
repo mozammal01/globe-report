@@ -3,7 +3,7 @@
 import Link from "@tiptap/extension-link";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import {
   Bold,
   Heading2,
@@ -72,6 +72,12 @@ export function RichTextEditor({
     },
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
   });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value, { emitUpdate: false });
+    }
+  }, [editor, value]);
 
   if (!editor) {
     return (

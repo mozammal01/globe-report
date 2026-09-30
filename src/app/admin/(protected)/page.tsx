@@ -1,14 +1,17 @@
 import {
   Clock,
+  ExternalLink,
   FolderTree,
   Globe2,
   Newspaper,
+  PenSquare,
   Tag,
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { H1, H3, Muted } from "@/components/ui/typography";
 import { getCurrentAdmin } from "@/lib/auth/session";
@@ -37,9 +40,25 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-1">
-        <H1>Welcome, {admin?.name}</H1>
-        <Muted>Here&apos;s what&apos;s happening across Globe Report.</Muted>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <H1>Welcome, {admin?.name}</H1>
+          <Muted>Here&apos;s what&apos;s happening across Globe Report.</Muted>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/" target="_blank">
+              <ExternalLink className="mr-1.5 size-3.5" />
+              View Site
+            </Link>
+          </Button>
+          <Button asChild size="sm" className="gap-1.5 font-medium shadow-xs">
+            <Link href="/admin/articles/new">
+              <PenSquare className="size-3.5" />
+              Write New Blog
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
