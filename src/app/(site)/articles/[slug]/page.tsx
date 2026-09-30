@@ -6,7 +6,10 @@ import { notFound } from "next/navigation";
 
 import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleView } from "@/components/article/article-view";
+import { AuthorBio } from "@/components/article/author-bio";
 import { BookmarkButton } from "@/components/article/bookmark-button";
+import { CommentSection } from "@/components/article/comment-section";
+import { ReadingProgressBar } from "@/components/article/reading-progress-bar";
 import { ShareButtons } from "@/components/article/share-buttons";
 import { ViewTracker } from "@/components/article/view-tracker";
 import { ArticleSection } from "@/components/home/article-section";
@@ -84,6 +87,7 @@ export default async function ArticlePage({
 
   return (
     <>
+      <ReadingProgressBar />
       <JsonLd data={articleJsonLd(article, articleUrl)} />
       <JsonLd data={breadcrumb} />
       <ViewTracker articleId={article.id} />
@@ -103,7 +107,7 @@ export default async function ArticlePage({
 
       <Section spacing="sm">
         <Container size="narrow">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <ArticleView article={article} />
 
             <AdSlot variant="in-article" />
@@ -113,11 +117,15 @@ export default async function ArticlePage({
               <BookmarkButton articleId={article.id} />
             </div>
 
+            <AuthorBio author={article.author} />
+
+            <CommentSection articleId={article.id} />
+
             <Link
-              href="/"
-              className="text-primary mt-2 text-sm font-medium hover:underline"
+              href="/blog"
+              className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-medium hover:underline"
             >
-              &larr; Back to home
+              &larr; Back to all stories
             </Link>
           </div>
         </Container>

@@ -27,6 +27,24 @@ export async function getTagById(id: string) {
   return prisma.tag.findUnique({ where: { id } });
 }
 
+export async function getTagBySlug(slug: string) {
+  return prisma.tag.findUnique({
+    where: { slug },
+    include: {
+      _count: {
+        select: {
+          articles: {
+            where: {
+              status: "PUBLISHED",
+              publishedAt: { lte: new Date() },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
 export type TagOption = Awaited<ReturnType<typeof getTags>>[number];
 export type TagWithCounts = Awaited<
   ReturnType<typeof getTagsWithCounts>

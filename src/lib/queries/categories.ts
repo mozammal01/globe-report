@@ -29,6 +29,24 @@ export async function getCategoryById(id: string) {
   return prisma.category.findUnique({ where: { id } });
 }
 
+export async function getCategoryBySlug(slug: string) {
+  return prisma.category.findUnique({
+    where: { slug },
+    include: {
+      _count: {
+        select: {
+          articles: {
+            where: {
+              status: "PUBLISHED",
+              publishedAt: { lte: new Date() },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
 export type CategoryOption = Awaited<ReturnType<typeof getCategories>>[number];
 export type CategoryWithCounts = Awaited<
   ReturnType<typeof getCategoriesWithCounts>

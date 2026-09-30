@@ -141,12 +141,14 @@ export async function getArticles({
   categorySlug,
   countrySlug,
   tagSlug,
+  searchQuery,
   page = 1,
   pageSize = ARTICLES_PAGE_SIZE,
 }: {
   categorySlug?: string;
   countrySlug?: string;
   tagSlug?: string;
+  searchQuery?: string;
   page?: number;
   pageSize?: number;
 } = {}) {
@@ -155,6 +157,16 @@ export async function getArticles({
     ...(categorySlug ? { category: { slug: categorySlug } } : {}),
     ...(countrySlug ? { country: { slug: countrySlug } } : {}),
     ...(tagSlug ? { tags: { some: { slug: tagSlug } } } : {}),
+    ...(searchQuery
+      ? {
+          OR: [
+            { title: { contains: searchQuery, mode: "insensitive" as const } },
+            {
+              excerpt: { contains: searchQuery, mode: "insensitive" as const },
+            },
+          ],
+        }
+      : {}),
   };
 
   const [articles, total] = await Promise.all([
@@ -237,6 +249,15 @@ export async function getArticleBySlug(slug: string) {
       seoTitle: true,
       seoDescription: true,
       updatedAt: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          avatarUrl: true,
+          bio: true,
+        },
+      },
       tags: { select: { name: true, slug: true } },
     },
   });

@@ -7,16 +7,18 @@ export type NavItem = {
 
 export const siteConfig = {
   name: "Globe Report",
-  shortName: "Globe Report",
-  tagline: "Global News & Knowledge, Clearly Reported",
+  shortName: "Globe Blog",
+  tagline: "Stories, Ideas & Global Perspectives",
   description:
-    "Globe Report is a global news and knowledge portal delivering clear, reliable reporting on the stories that shape the world.",
+    "Globe Report is a modern blog and digital publication delivering in-depth articles, technology insights, and thought-provoking stories.",
   url: clientEnv.NEXT_PUBLIC_SITE_URL,
   locale: "en_US",
   nav: [
     { title: "Home", href: "/" },
-    { title: "News", href: "/news" },
-    { title: "Countries", href: "/countries" },
+    { title: "Blog", href: "/blog" },
+    { title: "Categories", href: "/categories" },
+    { title: "About", href: "/about" },
+    { title: "Contact", href: "/contact" },
   ] satisfies NavItem[],
   legalNav: [
     { title: "About", href: "/about" },

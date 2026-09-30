@@ -1,10 +1,11 @@
-import { Newspaper } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Suspense } from "react";
 
 import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleSection } from "@/components/home/article-section";
 import { ArticleSectionSkeleton } from "@/components/home/article-section-skeleton";
 import { EditorsPicksSection } from "@/components/home/editors-picks-section";
+import { FeaturedCategoriesSection } from "@/components/home/featured-categories-section";
 import { FeaturedCountriesAsync } from "@/components/home/featured-countries-async";
 import { HeroSection } from "@/components/home/hero-section";
 import { NewsletterSection } from "@/components/home/newsletter-section";
@@ -23,9 +24,11 @@ export default async function HomePage() {
     <>
       <HeroSection article={hero} />
 
+      <FeaturedCategoriesSection />
+
       <ArticleSection
-        title="Latest News"
-        icon={Newspaper}
+        title="Latest Stories"
+        icon={Sparkles}
         articles={latest}
         cols={3}
         className="border-t-0"
